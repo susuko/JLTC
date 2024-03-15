@@ -7,7 +7,7 @@
 #define PYTHON_PATH "cv/venv/bin/python3"
 #define NINEPX_PATH "cv/9px.py"
 
-static FILE* ninepx_fp;
+static FILE *ninepx_fp;
 static int straight_line_detection = 0;
 
 static int detectStraightLine(int *px)
