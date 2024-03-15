@@ -10,6 +10,7 @@ int main(void)
 	pinMode(SW_RED, INPUT);
 	
 	initBuzzer();
+	initLineSensor();
 	
 	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
 	initLcd(lcd_fd);
