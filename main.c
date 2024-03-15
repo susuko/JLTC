@@ -9,12 +9,15 @@ int main(void)
 	
 	pinMode(SW_RED, INPUT);
 	
+	initBuzzer();
+	
 	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
 	initLcd(lcd_fd);
 	
 	start_shutdown_thread(lcd_fd);
 	
-	// TODO: Add Beep
+	setBuzzer(1000, 100);
+	setBuzzer(2000, 100);
 	
 	while (1) {
 		delay(10);

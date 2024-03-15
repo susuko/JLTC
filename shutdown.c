@@ -20,8 +20,9 @@ static PI_THREAD (shutdown_thread)
 		delay(1000);
 	}
 	
-	// TODO: Add Beep
-	// TODO: Lock Buzzer
+	setBuzzer(2000, 100);
+	setBuzzer(1000, 100);
+	
 	// TODO: Lock LCD
 	
 	clearLcd(_lcd_fd);
