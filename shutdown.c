@@ -23,8 +23,6 @@ static PI_THREAD (shutdown_thread)
 	setBuzzer(2000, 100);
 	setBuzzer(1000, 100);
 	
-	// TODO: Lock LCD
-	
 	clearLcd(_lcd_fd);
 	putsLcd(_lcd_fd, "SHUTDOWN...");
 	

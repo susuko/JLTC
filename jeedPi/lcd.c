@@ -1,6 +1,7 @@
 #include <wiringPi.h>
 #include <wiringPiI2C.h>
 #include <stdint.h>
+#include <pthread.h>
 #include "jeedPi.h"
 
 // RS Bit
@@ -45,6 +46,11 @@
 #define AQM1602_SET_CONT(c3, c2, c1, c0) \
 	AQM1602_IST(0, 1, 1, 1, c3, c2, c1, c0)
 
+#define AQM1602_LOCK pthread_mutex_lock(&lcd_mutex)
+#define AQM1602_UNLOCK pthread_mutex_unlock(&lcd_mutex)
+
+static pthread_mutex_t lcd_mutex;
+
 static const int max_col = 16;
 static const int max_row = 2;
 
@@ -53,14 +59,22 @@ static int line_number = 0;
 
 static void writeInst(int fd, uint8_t data)
 {
+	AQM1602_LOCK;
+	
 	wiringPiI2CWriteReg8(fd, AQM1602_RS0, data);
 	delay(1);
+	
+	AQM1602_UNLOCK;
 }
 
 static void writeData(int fd, uint8_t data)
 {
+	AQM1602_LOCK;
+	
 	wiringPiI2CWriteReg8(fd, AQM1602_RS1, data);
 	delay(1);
+	
+	AQM1602_UNLOCK;
 }
 
 void initLcd(int fd)
