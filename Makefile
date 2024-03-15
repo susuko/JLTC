@@ -1,6 +1,6 @@
 NAME = jltc.out
 
-SRCS = main.c shutdown.c buzzer.c straight.c line_sensor.c
+SRCS = main.c shutdown.c buzzer.c straight.c line_sensor.c button.c
 OBJS = $(SRCS:.c=.o)
 
 CC = gcc

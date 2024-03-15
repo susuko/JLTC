@@ -7,8 +7,7 @@ int main(void)
 {
 	wiringPiSetupGpio();
 	
-	pinMode(SW_RED, INPUT);
-	
+	initButton();
 	initBuzzer();
 	initLineSensor();
 	

@@ -7,6 +7,7 @@
 #define LINE_L 6
 #define SW_RED 17
 #define BZ 18
+#define SW_WHITE 27
 
 // shutdown
 void startShutdownThread(int lcd_fd);
@@ -30,5 +31,8 @@ typedef struct s_line_sensor {
 
 void initLineSensor(void);
 t_line_sensor getLineSensor(void);
+
+// button
+void initButton(void);
 
 #endif
