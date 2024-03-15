@@ -17,8 +17,8 @@ int main(void)
 	start_shutdown_thread(lcd_fd);
 	start_straight_line_detection_thread();
 	
-	setBuzzer(1000, 100);
-	setBuzzer(2000, 100);
+	// setBuzzer(1000, 100);
+	// setBuzzer(2000, 100);
 	
 	while (1) {
 		delay(10);
