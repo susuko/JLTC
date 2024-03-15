@@ -15,8 +15,8 @@ int main(void)
 	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
 	initLcd(lcd_fd);
 	
-	start_shutdown_thread(lcd_fd);
-	start_straight_line_detection_thread();
+	startShutdownThread(lcd_fd);
+	startStraightLineDetectionThread();
 	
 	// setBuzzer(1000, 100);
 	// setBuzzer(2000, 100);

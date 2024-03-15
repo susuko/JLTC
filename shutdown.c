@@ -12,7 +12,7 @@ static noreturn void shutdown(void)
 	exit(0);
 }
 
-static PI_THREAD (shutdown_thread)
+static PI_THREAD (shutdownThread)
 {
 	int counter = 0;
 	while(counter < 3) {
@@ -31,8 +31,8 @@ static PI_THREAD (shutdown_thread)
 	return NULL;
 }
 
-void start_shutdown_thread(int lcd_fd)
+void startShutdownThread(int lcd_fd)
 {
 	_lcd_fd = lcd_fd;
-	piThreadCreate(shutdown_thread);
+	piThreadCreate(shutdownThread);
 }
