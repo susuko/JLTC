@@ -7,12 +7,13 @@ int main(void)
 {
 	wiringPiSetupGpio();
 	
+	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
+	int dist_fd = wiringPiI2CSetup(GP2Y0E03_ADR);
+	
 	initButton();
 	initBuzzer();
 	initLineSensor();
 	initMotor();
-	
-	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
 	initLcd(lcd_fd);
 	
 	startShutdownThread(lcd_fd);
