@@ -40,7 +40,7 @@ t_line_sensor getLineSensor(void);
 void initButton(void);
 
 // motor
-void initMotor();
-void setMotor(int l1, int l2, int r1, int r2);
+void initMotor(void);
+void setMotor(double left, double right);
 
 #endif
