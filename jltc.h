@@ -14,4 +14,8 @@ void start_shutdown_thread(int lcd_fd);
 void initBuzzer(void);
 void setBuzzer(int hz, int ms);
 
+// straight line detection
+void start_straight_line_detection_thread();
+int get_straight_line_detection(void);
+
 #endif
