@@ -10,6 +10,7 @@ int main(void)
 	initButton();
 	initBuzzer();
 	initLineSensor();
+	initMotor();
 	
 	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
 	initLcd(lcd_fd);

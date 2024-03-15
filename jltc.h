@@ -7,6 +7,10 @@
 #define LINE_L 6
 #define SW_RED 17
 #define BZ 18
+#define MT_R2 22
+#define MT_R1 23
+#define MT_L2 24
+#define MT_L1 25
 #define SW_WHITE 27
 
 // shutdown
@@ -34,5 +38,9 @@ t_line_sensor getLineSensor(void);
 
 // button
 void initButton(void);
+
+// motor
+void initMotor();
+void setMotor(int l1, int l2, int r1, int r2);
 
 #endif
