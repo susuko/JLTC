@@ -1,6 +1,6 @@
 NAME = libjeedPi.a
 
-SRCS = lcd.c temp.c adc.c dac.c
+SRCS = lcd.c temp.c dist.c adc.c dac.c
 OBJS = $(SRCS:.c=.o)
 
 CC = gcc
