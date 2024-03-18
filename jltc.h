@@ -8,6 +8,7 @@
 #define SERVO 13
 #define SW_RED 17
 #define BZ 18
+#define LED 20
 #define MT_R2 22
 #define MT_R1 23
 #define MT_L2 24
@@ -39,6 +40,9 @@ t_line_sensor getLineSensor(void);
 
 // button
 void initButton(void);
+
+// led
+void initLed(void);
 
 // motor
 void initMotor(void);

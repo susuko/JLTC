@@ -11,6 +11,7 @@ int main(void)
 	int dist_fd = wiringPiI2CSetup(GP2Y0E03_ADR);
 	
 	initButton();
+	initLed();
 	initBuzzer();
 	initLineSensor();
 	initMotor();
