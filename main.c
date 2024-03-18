@@ -26,9 +26,7 @@ int main(void)
 	// setBuzzer(1000, 100);
 	// setBuzzer(2000, 100);
 	
-	while (1) {
-		delay(10);
-	}
+	startControlRobot();
 	
 	return 0;
 }

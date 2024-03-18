@@ -15,6 +15,9 @@
 #define MT_L1 25
 #define SW_WHITE 27
 
+// control
+void startControlRobot(void);
+
 // shutdown
 void startShutdownThread(int lcd_fd);
 
