@@ -18,7 +18,7 @@ int main(void)
 	initServo();
 	initLcd(lcd_fd);
 	
-	startShutdownThread(lcd_fd);
+	startShutdownManagementThread(lcd_fd);
 	startStraightLineDetectionThread();
 	startNearDistanceWarningThread(dist_fd);
 	startLoggerThread();

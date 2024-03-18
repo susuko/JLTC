@@ -19,7 +19,7 @@
 void startControlRobot(void);
 
 // shutdown
-void startShutdownThread(int lcd_fd);
+void startShutdownManagementThread(int lcd_fd);
 
 // buzzer
 #define BZ_LOCK_KEY 0
