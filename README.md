@@ -1,1 +1,4 @@
+# Prerequisites
+- Install OpenCV
+
 # TODO
