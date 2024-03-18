@@ -26,3 +26,15 @@ void setBuzzer(int hz, int ms)
 	
 	piUnlock(BZ_LOCK_KEY);
 }
+
+void playStartBeep(void)
+{
+	setBuzzer(1000, 100);
+	setBuzzer(2000, 100);
+}
+
+void playEndBeep(void)
+{
+	setBuzzer(2000, 100);
+	setBuzzer(1000, 100);
+}

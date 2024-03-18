@@ -23,8 +23,7 @@ int main(void)
 	startNearDistanceWarningThread(dist_fd);
 	startLoggerThread();
 	
-	// setBuzzer(1000, 100);
-	// setBuzzer(2000, 100);
+	// playStartBeep();
 	
 	startControlRobot();
 	

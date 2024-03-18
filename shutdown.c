@@ -20,8 +20,7 @@ static PI_THREAD (shutdownThread)
 		delay(1000);
 	}
 	
-	setBuzzer(2000, 100);
-	setBuzzer(1000, 100);
+	playEndBeep();
 	
 	clearLcd(_lcd_fd);
 	putsLcd(_lcd_fd, "SHUTDOWN...");

@@ -26,6 +26,8 @@ void startShutdownThread(int lcd_fd);
 
 void initBuzzer(void);
 void setBuzzer(int hz, int ms);
+void playStartBeep(void);
+void playEndBeep(void);
 
 // straight line detection
 void startStraightLineDetectionThread();
