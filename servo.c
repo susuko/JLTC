@@ -37,7 +37,7 @@ static void stopServo(void)
 	softPwmWrite(SERVO, 0);
 }
 
-// angle: -PI/2 ...PI/2 [rad]
+// angle: -PI/2 ... PI/2 [rad]
 void setServo(double angle)
 {
 	if (angle < -M_PI_2 || angle > M_PI_2) {
