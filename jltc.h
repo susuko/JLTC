@@ -5,6 +5,7 @@
 #define LINE_R 4
 #define LINE_C 5
 #define LINE_L 6
+#define SERVO 13
 #define SW_RED 17
 #define BZ 18
 #define MT_R2 22
@@ -42,5 +43,9 @@ void initButton(void);
 // motor
 void initMotor(void);
 void setMotor(double left, double right);
+
+// servo
+void initServo(void);
+void setServo(double angle);
 
 #endif

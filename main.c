@@ -14,6 +14,7 @@ int main(void)
 	initBuzzer();
 	initLineSensor();
 	initMotor();
+	initServo();
 	initLcd(lcd_fd);
 	
 	startShutdownThread(lcd_fd);
