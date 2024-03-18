@@ -28,6 +28,10 @@ void setBuzzer(int hz, int ms);
 void startStraightLineDetectionThread();
 int getStraightLineDetection(void);
 
+// logger
+void startLoggerThread(void);
+int logPrintf(char *fmt, ...);
+
 // line sensor
 typedef struct s_line_sensor {
 	int left;
