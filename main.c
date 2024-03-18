@@ -19,6 +19,7 @@ int main(void)
 	
 	startShutdownThread(lcd_fd);
 	startStraightLineDetectionThread();
+	startNearDistanceWarningThread(dist_fd);
 	
 	// setBuzzer(1000, 100);
 	// setBuzzer(2000, 100);

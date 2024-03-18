@@ -48,4 +48,8 @@ void setMotor(double left, double right);
 void initServo(void);
 void setServo(double angle);
 
+// near distance warning
+void startNearDistanceWarningThread(int dist_fd);
+int getNearDistanceWarning(void);
+
 #endif
