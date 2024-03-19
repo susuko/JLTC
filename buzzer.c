@@ -7,7 +7,7 @@ static pthread_mutex_t buzzer_mutex;
 
 void initBuzzer(void)
 {
-	pinMode(BZ, PWM_OUTPUT);
+	pinMode(IO_BZ, PWM_OUTPUT);
 	pwmSetClock(54); // 1us
 	pwmSetMode(PWM_MODE_MS);
 }
@@ -19,13 +19,13 @@ void setBuzzer(int hz, int ms)
 	if (hz > 0) {
 		int maxRange = 1000 * 1000 / hz;
 		pwmSetRange(maxRange);
-		pwmWrite(BZ, maxRange / 2);
+		pwmWrite(IO_BZ, maxRange / 2);
 	}
 	else {
-		pwmWrite(BZ, 0);
+		pwmWrite(IO_BZ, 0);
 	}
 	delay(ms);
-	pwmWrite(BZ, 0);
+	pwmWrite(IO_BZ, 0);
 	
 	pthread_mutex_unlock(&buzzer_mutex);
 }

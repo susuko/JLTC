@@ -41,9 +41,9 @@ static int testCalcLineDist(void)
 t_line_sensor getLineSensor(void)
 {
 	return (t_line_sensor) {
-		.left = digitalRead(LINE_L),
-		.centor = !digitalRead(LINE_C), // invert
-		.right = digitalRead(LINE_R)
+		.left = digitalRead(IO_LN_LE),
+		.centor = !digitalRead(IO_LN_CT), // invert
+		.right = digitalRead(IO_LN_RI)
 	};
 }
 
@@ -56,7 +56,7 @@ void initLineSensor(void)
 {
 	assert(testCalcLineDist());
 	
-	pinMode(LINE_L, INPUT);
-	pinMode(LINE_C, INPUT);
-	pinMode(LINE_R, INPUT);
+	pinMode(IO_LN_LE, INPUT);
+	pinMode(IO_LN_CT, INPUT);
+	pinMode(IO_LN_RI, INPUT);
 }

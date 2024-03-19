@@ -17,8 +17,8 @@ static const int mounting_degree = 35;
 
 void initServo(void)
 {
-	pinMode(SERVO, OUTPUT);
-	softPwmCreate(SERVO, 0, pwm_range);
+	pinMode(IO_SV, OUTPUT);
+	softPwmCreate(IO_SV, 0, pwm_range);
 }
 
 static void setServoRaw(int level)
@@ -29,12 +29,12 @@ static void setServoRaw(int level)
 	if (level > max_level) {
 		level = max_level;
 	}
-	softPwmWrite(SERVO, level);
+	softPwmWrite(IO_SV, level);
 }
 
 static void stopServo(void)
 {
-	softPwmWrite(SERVO, 0);
+	softPwmWrite(IO_SV, 0);
 }
 
 // angle: -PI/2 ... PI/2 [rad]

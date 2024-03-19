@@ -2,18 +2,18 @@
 #define _JLTC_H
 
 // GPIO definition
-#define LINE_R 4
-#define LINE_C 5
-#define LINE_L 6
-#define SERVO 13
-#define SW_RED 17
-#define BZ 18
-#define LED 20
-#define MT_R2 22
-#define MT_R1 23
-#define MT_L2 24
-#define MT_L1 25
-#define SW_WHITE 27
+#define IO_LN_RI	4
+#define IO_LN_CT	5
+#define IO_LN_LE	6
+#define IO_SV		13
+#define IO_SW_RD	17
+#define IO_BZ		18
+#define IO_LD		20
+#define IO_MT_R2	22
+#define IO_MT_R1	23
+#define IO_MT_L2	24
+#define IO_MT_L1	25
+#define IO_SW_WT	27
 
 // control
 void startControlRobot(void);

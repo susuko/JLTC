@@ -64,10 +64,10 @@ void setMotor(double left, double right)
 	int left_value = (int)round(fabs(left) * pwm_range);
 	int right_value = (int)round(fabs(right) * pwm_range);
 	
-	softPwmWrite(MT_L1, left > 0 ? left_value : 0);
-	softPwmWrite(MT_L2, left < 0 ? left_value : 0);
-	softPwmWrite(MT_R1, right > 0 ? right_value : 0);
-	softPwmWrite(MT_R2, right < 0 ? right_value : 0);
+	softPwmWrite(IO_MT_L1, left > 0 ? left_value : 0);
+	softPwmWrite(IO_MT_L2, left < 0 ? left_value : 0);
+	softPwmWrite(IO_MT_R1, right > 0 ? right_value : 0);
+	softPwmWrite(IO_MT_R2, right < 0 ? right_value : 0);
 }
 
 // x, y: -1.0 ... 1.0
@@ -81,13 +81,13 @@ void initMotor(void)
 {
 	assert(testXyToLr());
 	
-	pinMode(MT_R2, OUTPUT);
-	pinMode(MT_R1, OUTPUT);
-	pinMode(MT_L2, OUTPUT);
-	pinMode(MT_L1, OUTPUT);
+	pinMode(IO_MT_R2, OUTPUT);
+	pinMode(IO_MT_R1, OUTPUT);
+	pinMode(IO_MT_L2, OUTPUT);
+	pinMode(IO_MT_L1, OUTPUT);
 	
-	softPwmCreate(MT_R2, 0, pwm_range);
-	softPwmCreate(MT_R1, 0, pwm_range);
-	softPwmCreate(MT_L2, 0, pwm_range);
-	softPwmCreate(MT_L1, 0, pwm_range);
+	softPwmCreate(IO_MT_R2, 0, pwm_range);
+	softPwmCreate(IO_MT_R1, 0, pwm_range);
+	softPwmCreate(IO_MT_L2, 0, pwm_range);
+	softPwmCreate(IO_MT_L1, 0, pwm_range);
 }

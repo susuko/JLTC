@@ -4,5 +4,5 @@
 
 void initLed(void)
 {
-	pinMode(LED, OUTPUT);
+	pinMode(IO_LD, OUTPUT);
 }
