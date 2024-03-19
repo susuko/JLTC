@@ -22,8 +22,6 @@ void startControlRobot(void);
 void startShutdownManagementThread(int lcd_fd);
 
 // buzzer
-#define BZ_LOCK_KEY 0
-
 void initBuzzer(void);
 void setBuzzer(int hz, int ms);
 void playStartBeep(void);

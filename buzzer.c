@@ -1,6 +1,9 @@
+#include <pthread.h>
 #include <wiringPi.h>
 #include <jeedPi.h>
 #include <jltc.h>
+
+static pthread_mutex_t buzzer_mutex;
 
 void initBuzzer(void)
 {
@@ -11,7 +14,7 @@ void initBuzzer(void)
 
 void setBuzzer(int hz, int ms)
 {
-	piLock(BZ_LOCK_KEY);
+	pthread_mutex_lock(&buzzer_mutex);
 	
 	if (hz > 0) {
 		int maxRange = 1000 * 1000 / hz;
@@ -24,7 +27,7 @@ void setBuzzer(int hz, int ms)
 	delay(ms);
 	pwmWrite(BZ, 0);
 	
-	piUnlock(BZ_LOCK_KEY);
+	pthread_mutex_unlock(&buzzer_mutex);
 }
 
 void playStartBeep(void)
