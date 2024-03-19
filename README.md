@@ -7,6 +7,7 @@ Reference Book ISBN: 978-4-297-11299-8
 - OS: Raspbian GNU/Linux 10 (buster)
 
 # Dependencies
+- WiringPi
 - OpenCV
 - Picamera
 
