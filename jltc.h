@@ -44,6 +44,7 @@ typedef struct s_line_sensor {
 
 void initLineSensor(void);
 t_line_sensor getLineSensor(void);
+double getLineDist(void);
 
 // button
 void initButton(void);
@@ -54,6 +55,7 @@ void initLed(void);
 // motor
 void initMotor(void);
 void setMotor(double left, double right);
+void setMotorXy(double x, double y);
 
 // servo
 void initServo(void);
