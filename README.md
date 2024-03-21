@@ -12,6 +12,5 @@ Reference Book ISBN: 978-4-297-11299-8
 - Picamera
 
 # TODO
-- Create a retry function in case of derailment.
 - Create a dashboard.
 - Create a map from driving data.
