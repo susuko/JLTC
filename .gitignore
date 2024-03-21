@@ -1,4 +1,4 @@
 *.o
 *.a
 *.out
-cv/venv/*
+python/venv/*

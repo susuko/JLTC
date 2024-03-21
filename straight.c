@@ -4,8 +4,8 @@
 #include <jeedPi.h>
 #include <jltc.h>
 
-#define PYTHON_PATH "cv/venv/bin/python3"
-#define NINEPX_PATH "cv/9px.py"
+#define PYTHON_PATH "python/venv/bin/python3"
+#define NINEPX_PATH "python/9px.py"
 
 static FILE *ninepx_fp;
 static int straight_line_detection = 0;
