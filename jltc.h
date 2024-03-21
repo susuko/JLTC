@@ -33,7 +33,7 @@ int getStraightLineDetection(void);
 
 // logger
 void startLoggerThread(void);
-int logPrintf(char *fmt, ...);
+int logPrintf(char *cmd, char *fmt, ...);
 
 // line sensor
 typedef struct s_line_sensor {
