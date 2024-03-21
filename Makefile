@@ -13,6 +13,7 @@ SRCS = \
 	servo.c \
 	shutdown.c \
 	straight.c
+
 OBJS = $(SRCS:.c=.o)
 
 CC = gcc
