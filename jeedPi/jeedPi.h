@@ -22,7 +22,7 @@ double readTemp(int fd);
 // GP2Y0E03
 #define GP2Y0E03_ADR 0x40
 
-uint8_t readDist(int fd);
+double readDist(int fd);
 
 // MCP4922
 void writeDac(int spi_ch, uint8_t dac_ch, uint16_t data);

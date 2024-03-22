@@ -4,23 +4,23 @@
 #include <jltc.h>
 
 // Warning threshold [cm]
-static const int dist_th = 15;
+static const double dist_th = 15;
 
 static int _dist_fd;
 static int nearDistanceWarning = 0;
 
 static PI_THREAD (nearDistanceWarningThread)
 {
-	int prev_dist = 0;
+	double prev_dist = 0;
 	
 	while (1) {
-		int dist = readDist(_dist_fd);
+		double dist = readDist(_dist_fd);
 		nearDistanceWarning = dist < dist_th;
 		if (prev_dist != dist) {
-			logPrintf("nearDistanceWarningThread", "%d", dist);
+			logPrintf("nearDistanceWarningThread", "%.2f", dist);
 			prev_dist = dist;
 		}
-		delay(50);
+		delay(100);
 	}
 	
 	return NULL;
