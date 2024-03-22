@@ -7,16 +7,6 @@
 
 static const int pwm_range = 4;
 
-typedef struct s_vec2 {
-	double x;
-	double y;
-} t_vec2;
-
-static int vec2Eq(t_vec2 a, t_vec2 b)
-{
-	return a.x == b.x && a.y == b.y;
-}
-
 static t_vec2 xyToLr(t_vec2 xy)
 {
 	double x_is_neg = xy.x < 0, x_sign = x_is_neg ? -1 : 1;

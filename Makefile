@@ -12,7 +12,8 @@ SRCS = \
 	motor.c \
 	servo.c \
 	shutdown.c \
-	straight.c
+	straight.c \
+	vector.c
 
 OBJS = $(SRCS:.c=.o)
 

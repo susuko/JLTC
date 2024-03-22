@@ -73,4 +73,12 @@ void setServo(double angle);
 void startNearDistanceWarningThread(int dist_fd);
 int getNearDistanceWarning(void);
 
+// vector
+typedef struct s_vec2 {
+	double x;
+	double y;
+} t_vec2;
+
+int vec2Eq(t_vec2 a, t_vec2 b);
+
 #endif
