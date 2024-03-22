@@ -36,20 +36,22 @@ def input_thread():
         sleep(0.01)
 
 def set_motor(args):
-    left, right = [int(arg) for arg in args]
-    left_text = tire_text_format % (left * 25)
-    right_text = tire_text_format % (right * 25)
+    left, right = [int(float(arg) * 100) for arg in args]
+    left_text = tire_text_format % left
+    right_text = tire_text_format % right
     canvas.itemconfig(left_tire_text, text = left_text)
     canvas.itemconfig(right_tire_text, text = right_text)
 
 def near_distance_warning_thread(args):
-    dist = int(args[0])
+    dist = float(args[0])
     dist_label.config(text = dist_text_format % dist)
 
 bg_color = "#212121"
 font_name = "Consolas"
 font = (font_name, 18)
 font_color = "#ffffff"
+tire_text_format = "%3d\n[%%]"
+dist_text_format = "DISTANCE: %.2f[CM]"
 
 root = tk.Tk()
 root.title("JLTC")
@@ -94,7 +96,6 @@ lcd = canvas.create_rectangle(
 left_tire = create_round_rectangle(
     *left_tire_points, r = 5, fill = "#000000"
 )
-tire_text_format = "%3d\n[%%]"
 left_tire_text = canvas.create_text(
     left_tire_mid_point, text = tire_text_format % 0, font = font, fill = font_color
 )
@@ -108,7 +109,6 @@ right_tire_text = canvas.create_text(
 canvas.scale(tk.ALL, 0, 0, canvas_scale, canvas_scale)
 canvas.grid(row = 0, column = 0)
 
-dist_text_format = "DISTANCE: %d[CM]"
 dist_label = tk.Label(
     text = dist_text_format % 0, bg = bg_color, fg = font_color, font = font
 )
