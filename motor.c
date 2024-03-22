@@ -7,6 +7,8 @@
 
 static const int pwm_range = 4;
 
+static double last_left = 0, last_right = 0;
+
 static t_vec2 xyToLr(t_vec2 xy)
 {
 	double x_is_neg = xy.x < 0, x_sign = x_is_neg ? -1 : 1;
@@ -51,7 +53,6 @@ static int testXyToLr(void)
 // left, right: -1.0 ... 1.0
 void setMotor(double left, double right)
 {
-	static double last_left = 0, last_right = 0;
 	int left_value = (int)round(fabs(left) * pwm_range);
 	int right_value = (int)round(fabs(right) * pwm_range);
 	
@@ -72,6 +73,11 @@ void setMotorXy(double x, double y)
 {
 	t_vec2 lr = xyToLr((t_vec2){ x, y });
 	setMotor(lr.x, lr.y);
+}
+
+t_vec2 getMotor(void)
+{
+	return (t_vec2){ last_left, last_right };
 }
 
 void initMotor(void)
