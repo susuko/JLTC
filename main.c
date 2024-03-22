@@ -22,6 +22,7 @@ int main(void)
 	startStraightLineDetectionThread();
 	startNearDistanceWarningThread(dist_fd);
 	startLoggerThread();
+	startHeadAngleControlThread();
 	
 	// playStartBeep();
 	

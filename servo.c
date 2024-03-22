@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <math.h>
 #include <wiringPi.h>
 #include <softPwm.h>
@@ -55,4 +56,33 @@ void setServo(double angle)
 	delay(cycle_ms * 3);
 	
 	stopServo();
+}
+
+static PI_THREAD (headAngleControlThread)
+{
+	const double diff_th = 1.0;
+	const double servo_angle = M_PI / 6.0;
+	
+	double prev_angle = 0;
+	
+	while (1) {
+		t_vec2 lr = getMotor();
+		double diff = lr.y - lr.x;
+		double angle = diff > diff_th
+			? servo_angle
+			: diff < -diff_th
+				? -servo_angle
+				: 0;
+		if (prev_angle != angle)
+			setServo(angle);
+		prev_angle = angle;
+		delay(1000);
+	}
+	
+	return NULL;
+}
+
+void startHeadAngleControlThread(void)
+{
+	piThreadCreate(headAngleControlThread);
 }
