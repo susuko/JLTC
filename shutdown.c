@@ -16,7 +16,7 @@ static PI_THREAD (shutdownManagementThread)
 {
 	int counter = 0;
 	while(counter < 3) {
-		counter = digitalRead(SW_RED) ? counter + 1 : 0;
+		counter = getRedButton() ? counter + 1 : 0;
 		delay(1000);
 	}
 	

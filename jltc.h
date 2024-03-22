@@ -53,9 +53,12 @@ double getLineDist(void);
 
 // button
 void initButton(void);
+int getRedButton(void);
+int getWhiteButton(void);
 
 // led
 void initLed(void);
+void setLed(int v);
 
 // motor
 void initMotor(void);
