@@ -15,6 +15,11 @@
 #define IO_MT_L1	25
 #define IO_SW_WT	27
 
+// python
+#define PYTHON_PATH "python/venv/bin/python3"
+#define NINEPX_PATH "python/9px.py"
+#define VIEWER_PATH "python/dashboard.py"
+
 // control
 void startControlRobot(void);
 

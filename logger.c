@@ -5,10 +5,11 @@
 #include <wiringPi.h>
 #include <jltc.h>
 
-#define LOG_ENABLE 0
+#define LOG_ENABLE 1
 #define LOG_BUF_SIZE PIPE_BUF
 
 static FILE *in_pipe, *out_pipe;
+static FILE *viewer_fp;
 
 static PI_THREAD (loggerThread)
 {
@@ -16,6 +17,8 @@ static PI_THREAD (loggerThread)
 	while (fgets(buf, sizeof(buf), out_pipe)) {
 		if (LOG_ENABLE) {
 			printf("%s", buf);
+			fprintf(viewer_fp, "%s", buf);
+			fflush(viewer_fp);
 		}
 	}
 	
@@ -55,5 +58,6 @@ int logPrintf(char *cmd, char *fmt, ...)
 void startLoggerThread(void)
 {
 	initLoggerPipe();
+	viewer_fp = popen(PYTHON_PATH " " VIEWER_PATH, "w");
 	piThreadCreate(loggerThread);
 }

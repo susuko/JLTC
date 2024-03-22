@@ -61,8 +61,15 @@ static int testXyToLr(void)
 // left, right: -1.0 ... 1.0
 void setMotor(double left, double right)
 {
+	static int last_left_value = 0, last_right_value = 0;
 	int left_value = (int)round(fabs(left) * pwm_range);
 	int right_value = (int)round(fabs(right) * pwm_range);
+	
+	if (last_left_value != left_value || last_right_value != right_value) {
+		last_left_value = left_value;
+		last_right_value = right_value;
+		logPrintf("setMotor", "%d, %d", left_value, right_value);
+	}
 	
 	softPwmWrite(IO_MT_L1, left > 0 ? left_value : 0);
 	softPwmWrite(IO_MT_L2, left < 0 ? left_value : 0);
