@@ -31,17 +31,30 @@ def input_thread():
         time = int(time_str)
         if (command == "setMotor"):
             set_motor(args)
+        elif (command == "nearDistanceWarningThread"):
+            near_distance_warning_thread(args)
         sleep(0.01)
 
 def set_motor(args):
     left, right = [int(arg) for arg in args]
-    canvas.itemconfig(left_tire_text, text = left)
-    canvas.itemconfig(right_tire_text, text = right)
+    left_text = tire_text_format % (left * 25)
+    right_text = tire_text_format % (right * 25)
+    canvas.itemconfig(left_tire_text, text = left_text)
+    canvas.itemconfig(right_tire_text, text = right_text)
+
+def near_distance_warning_thread(args):
+    dist = int(args[0])
+    dist_label.config(text = dist_text_format % dist)
+
+bg_color = "#212121"
+font_name = "Consolas"
+font = (font_name, 18)
+font_color = "#ffffff"
 
 root = tk.Tk()
 root.title("JLTC")
 root.geometry("1280x720")
-root.config(bg = "#212121")
+root.config(bg = bg_color)
 
 canvas_size = Size(width = 200, height = 300)
 canvas_scale = 2.4
@@ -50,7 +63,7 @@ canvas = tk.Canvas(
     height = canvas_size.height * canvas_scale,
     highlightthickness = 0
 )
-canvas.config(bg = "#212121")
+canvas.config(bg = bg_color)
 
 frame_rect = Rect(Point(0, 0), Size(190, 290))
 main_board_rect = Rect(Point(0, 0), Size(100, 200))
@@ -81,18 +94,25 @@ lcd = canvas.create_rectangle(
 left_tire = create_round_rectangle(
     *left_tire_points, r = 5, fill = "#000000"
 )
+tire_text_format = "%3d\n[%%]"
 left_tire_text = canvas.create_text(
-    left_tire_mid_point, text = 0, font = ("Consolas", 18), fill = "#ffffff"
+    left_tire_mid_point, text = tire_text_format % 0, font = font, fill = font_color
 )
 right_tire = create_round_rectangle(
-    *rect_to_points(right_tire_rect), r = 5, fill = "#000000"
+    *right_tire_points, r = 5, fill = "#000000"
 )
 right_tire_text = canvas.create_text(
-    right_tire_mid_point, text = 0, font = ("Consolas", 18), fill = "#ffffff"
+    right_tire_mid_point, text = tire_text_format % 0, font = font, fill = font_color
 )
 
 canvas.scale(tk.ALL, 0, 0, canvas_scale, canvas_scale)
-canvas.place(x = 0, y = 0)
+canvas.grid(row = 0, column = 0)
+
+dist_text_format = "DISTANCE: %d[CM]"
+dist_label = tk.Label(
+    text = dist_text_format % 0, bg = bg_color, fg = font_color, font = font
+)
+dist_label.grid(row = 0, column = 1, pady = 10, sticky = tk.N)
 
 threading.Thread(target = input_thread).start()
 

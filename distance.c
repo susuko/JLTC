@@ -11,9 +11,15 @@ static int nearDistanceWarning = 0;
 
 static PI_THREAD (nearDistanceWarningThread)
 {
+	int prev_dist = 0;
+	
 	while (1) {
 		int dist = readDist(_dist_fd);
 		nearDistanceWarning = dist < dist_th;
+		if (prev_dist != dist) {
+			logPrintf("nearDistanceWarningThread", "%d", dist);
+			prev_dist = dist;
+		}
 		delay(50);
 	}
 	
