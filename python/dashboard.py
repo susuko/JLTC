@@ -79,27 +79,25 @@ class Dashboard(tk.Tk):
         self.right_tire, self.right_tire_text = self.create_tire(self.RIGHT_TIRE_RECT)
 
     def create_board(self, rect):
-        return self._canvas_create_round_rectangle(rect, r=5, fill=self.SHAPE_COLOR)
+        (x0, y0), (x1, y1) = self._rect_to_points(rect)
+        board = self.canvas.create_rectangle(
+            x0, y0, x1, y1, fill=self.SHAPE_COLOR, outline=""
+        )
+        return board
 
     def create_tire(self, rect):
         (x0, y0), (x1, y1) = self._rect_to_points(rect)
-        tire = self._canvas_create_round_rectangle(rect, r=5, fill=self.SHAPE_COLOR)
-        tire_mid_point = ((x0 + x1) / 2, (y0 + y1) / 2)
+        tire = self.canvas.create_rectangle(
+            x0, y0, x1, y1, fill=self.SHAPE_COLOR, outline=""
+        )
         tire_text = self.canvas.create_text(
-            tire_mid_point,
+            (x0 + x1) / 2,
+            (y0 + y1) / 2,
             text=self.TIRE_TEXT_FORMAT % 0,
             font=self.FONT,
             fill=self.FONT_COLOR
         )
         return (tire, tire_text)
-
-    def _canvas_create_round_rectangle(self, rect, r, **kwargs):
-        (x0, y0), (x1, y1) = self._rect_to_points(rect)
-        return self.canvas.create_polygon(
-            x0 + r, y0, x1 - r, y0, x1, y0, x1, y0 + r, x1, y1 - r, x1, y1,
-            x1 - r, y1, x0 + r, y1, x0, y1, x0, y1 - r, x0, y0 + r, x0, y0,
-            **kwargs, smooth=True
-        )
 
     def _rect_to_points(self, rect):
         canvas_mid = Point(x=self.CANVAS_SIZE.width / 2, y=self.CANVAS_SIZE.height / 2)
