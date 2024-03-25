@@ -66,7 +66,14 @@ typedef struct s_vec2 {
 	double y;
 } t_vec2;
 
+typedef struct s_vec3 {
+	double x;
+	double y;
+	double z;
+} t_vec3;
+
 int vec2Eq(t_vec2 a, t_vec2 b);
+int vec3Eq(t_vec3 a, t_vec3 b);
 
 // motor
 void initMotor(void);
@@ -82,5 +89,8 @@ void startHeadAngleControlThread(void);
 // near distance warning
 void startNearDistanceWarningThread(int dist_fd);
 int getNearDistanceWarning(void);
+
+// position
+void startLocationManagementThread();
 
 #endif

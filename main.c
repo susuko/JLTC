@@ -23,6 +23,7 @@ int main(void)
 	startNearDistanceWarningThread(dist_fd);
 	startLoggerThread();
 	startHeadAngleControlThread();
+	startLocationManagementThread();
 	
 	// playStartBeep();
 	

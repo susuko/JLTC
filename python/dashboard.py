@@ -127,7 +127,8 @@ class Dashboard(tk.Tk):
     def input_thread(self):
         command_handlers = {
             "setMotor": self.update_set_motor,
-            "nearDistanceWarningThread": self.update_near_distance_warning_thread
+            "nearDistanceWarningThread": self.update_near_distance_warning_thread,
+            "locationManagementThread": lambda args: None
         }
         for line in fileinput.input():
             _, command, *args = [s.strip() for s in line.split(",")]

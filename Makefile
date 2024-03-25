@@ -10,6 +10,7 @@ SRCS = \
 	logger.c \
 	main.c \
 	motor.c \
+	position.c \
 	servo.c \
 	shutdown.c \
 	straight.c \
