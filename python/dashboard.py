@@ -26,6 +26,7 @@ class Dashboard(tk.Tk):
 
     # Text format constant
     TIRE_TEXT_FORMAT = "%3d\n[%%]"
+    LSEN_TEXT_FORMAT = "> LINE_SENSOR: %d, %d, %d"
     DIST_TEXT_FORMAT = "> DISTANCE: %.2f[CM]"
     POS_TEXT_FORMAT = "> POSITION: %f, %f, %f"
 
@@ -57,6 +58,7 @@ class Dashboard(tk.Tk):
         info_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
         info_inner_frame = tk.Frame(info_frame, bg=self.BG_COLOR)
         info_inner_frame.pack(side="left", padx=10, pady=10, fill="y")
+        self.create_line_sensor_label(info_inner_frame)
         self.create_distance_label(info_inner_frame)
         self.create_position_label(info_inner_frame)
 
@@ -115,6 +117,16 @@ class Dashboard(tk.Tk):
             )
         ]
 
+    def create_line_sensor_label(self, parent):
+        self.lsen_label = tk.Label(
+            parent,
+            text=self.LSEN_TEXT_FORMAT % (0, 0, 0),
+            bg=self.BG_COLOR,
+            fg=self.FONT_COLOR,
+            font=self.FONT
+        )
+        self.lsen_label.pack(anchor="w")
+
     def create_distance_label(self, parent):
         self.dist_label = tk.Label(
             parent,
@@ -139,6 +151,7 @@ class Dashboard(tk.Tk):
     def input_thread(self):
         command_handlers = {
             "setMotor": self.update_set_motor,
+            "getLineSensor": self.update_get_line_sensor,
             "nearDistanceWarningThread": self.update_near_distance_warning_thread,
             "locationManagementThread": self.update_location_management_thread
         }
@@ -153,6 +166,10 @@ class Dashboard(tk.Tk):
         right_text = self.TIRE_TEXT_FORMAT % right
         self.canvas.itemconfig(self.left_tire_text, text=left_text)
         self.canvas.itemconfig(self.right_tire_text, text=right_text)
+
+    def update_get_line_sensor(self, args):
+        lsen = tuple(map(int, args))
+        self.lsen_label.config(text=self.LSEN_TEXT_FORMAT % lsen)
 
     def update_near_distance_warning_thread(self, args):
         dist = float(args[0])

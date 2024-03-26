@@ -40,11 +40,20 @@ static int testCalcLineDist(void)
 // White: 1, Black: 0
 t_line_sensor getLineSensor(void)
 {
-	return (t_line_sensor) {
+	static t_line_sensor last = { 0, 0, 0 };
+	
+	t_line_sensor now = {
 		.left = digitalRead(IO_LN_LE),
 		.centor = !digitalRead(IO_LN_CT), // invert
 		.right = digitalRead(IO_LN_RI)
 	};
+	
+	if (last.left != now.left || last.centor != now.centor || last.right != now.right) {
+		logPrintf("getLineSensor", "%d, %d, %d", now.left, now.centor, now.right);
+	}
+	last = now;
+	
+	return now;
 }
 
 double getLineDist(void)
