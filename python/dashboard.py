@@ -177,7 +177,7 @@ class Dashboard(tk.Tk):
             "setMotor": self.update_set_motor,
             "getLineSensor": self.update_get_line_sensor,
             "setServo": self.update_set_servo,
-            "nearDistanceWarningThread": self.update_near_distance_warning_thread,
+            "distanceMonitoringThread": self.update_distance_monitoring_thread,
             "locationManagementThread": self.update_location_management_thread,
             "straightLineDetectionThread": self.update_straight_line_detection_thread
         })
@@ -201,7 +201,7 @@ class Dashboard(tk.Tk):
         servo = float(args[0])
         self.servo_label.config(text=self.SERVO_TEXT_FORMAT % servo)
 
-    def update_near_distance_warning_thread(self, args):
+    def update_distance_monitoring_thread(self, args):
         dist = float(args[0])
         self.dist_label.config(text=self.DIST_TEXT_FORMAT % dist)
 

@@ -81,9 +81,9 @@ void initServo(void);
 void setServo(double angle);
 void startHeadAngleControlThread(void);
 
-// near distance warning
-void startNearDistanceWarningThread(int dist_fd);
-int getNearDistanceWarning(void);
+// distance monitoring
+void startDistanceMonitoringThread(int dist_fd);
+int getDistanceWarning(void);
 
 // position
 void startLocationManagementThread();

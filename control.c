@@ -30,7 +30,7 @@ void startControlRobot(void)
 		uint32_t now = millis() - start_time;
 		double line_dist = getLineDist();
 		
-		if (getNearDistanceWarning()) {
+		if (getDistanceWarning()) {
 			setMotorXy(0.0, 0.0);
 		}
 		else if (isfinite(line_dist)) {

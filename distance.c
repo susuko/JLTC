@@ -7,32 +7,34 @@
 static const double dist_th = 15;
 
 static int _dist_fd;
-static int nearDistanceWarning = 0;
+static int _distanceWarning = 0;
 
-static PI_THREAD (nearDistanceWarningThread)
+static PI_THREAD (distanceMonitoringThread)
 {
 	double prev_dist = 0;
 	
 	while (1) {
 		double dist = readDist(_dist_fd);
-		nearDistanceWarning = dist < dist_th;
+		_distanceWarning = dist < dist_th;
+		
 		if (prev_dist != dist) {
-			logPrintf("nearDistanceWarningThread", "%.2f", dist);
+			logPrintf("distanceMonitoringThread", "%.2f", dist);
 			prev_dist = dist;
 		}
+		
 		delay(100);
 	}
 	
 	return NULL;
 }
 
-int getNearDistanceWarning(void)
+int getDistanceWarning(void)
 {
-	return nearDistanceWarning;
+	return _distanceWarning;
 }
 
-void startNearDistanceWarningThread(int dist_fd)
+void startDistanceMonitoringThread(int dist_fd)
 {
 	_dist_fd = dist_fd;
-	piThreadCreate(nearDistanceWarningThread);
+	piThreadCreate(distanceMonitoringThread);
 }

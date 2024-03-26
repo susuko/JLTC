@@ -20,7 +20,7 @@ int main(void)
 	
 	startShutdownManagementThread(lcd_fd);
 	startStraightLineDetectionThread();
-	startNearDistanceWarningThread(dist_fd);
+	startDistanceMonitoringThread(dist_fd);
 	startLoggerThread();
 	startHeadAngleControlThread();
 	startLocationManagementThread();
