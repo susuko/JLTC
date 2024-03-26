@@ -5,9 +5,9 @@
 #include <jltc.h>
 
 static FILE *ninepx_fp;
-static int straight_line_detection = 0;
+static int _in_straight_line = 0;
 
-static int detectStraightLine(int *px)
+static int detectInStraightLine(int *px)
 {
 	const int black_th = 64, white_th = 96;
 	
@@ -16,7 +16,7 @@ static int detectStraightLine(int *px)
 		&& px[6] < black_th && px[7] > white_th && px[8] < black_th;
 }
 
-static PI_THREAD (straightLineDetectionThread)
+static PI_THREAD (straightLineMonitoringThread)
 {
 	int px[9];
 	while (1) {
@@ -24,24 +24,24 @@ static PI_THREAD (straightLineDetectionThread)
 			fscanf(ninepx_fp, "%d", &px[i]);
 		}
 		
-		int now_straight_line_detection = detectStraightLine(px);
-		if (straight_line_detection != now_straight_line_detection) {
-			logPrintf("straightLineDetectionThread", "%d", now_straight_line_detection);
+		int new_in_straight_line = detectInStraightLine(px);
+		if (_in_straight_line != new_in_straight_line) {
+			logPrintf("straightLineMonitoringThread", "%d", new_in_straight_line);
 		}
-		straight_line_detection = now_straight_line_detection;
+		_in_straight_line = new_in_straight_line;
 		
 		delay(50);
 	}
 	return NULL;
 }
 
-int getStraightLineDetection(void)
+int getInStraightLine(void)
 {
-	return straight_line_detection;
+	return _in_straight_line;
 }
 
-void startStraightLineDetectionThread(void)
+void startStraightLineMonitoringThread(void)
 {
 	ninepx_fp = popen(PYTHON_PATH " " NINEPX_PATH, "r");
-	piThreadCreate(straightLineDetectionThread);
+	piThreadCreate(straightLineMonitoringThread);
 }

@@ -48,9 +48,9 @@ void setBuzzer(int hz, int ms);
 void playStartBeep(void);
 void playEndBeep(void);
 
-// straight line detection
-void startStraightLineDetectionThread();
-int getStraightLineDetection(void);
+// straight line
+void startStraightLineMonitoringThread();
+int getInStraightLine(void);
 
 // logger
 void startLoggerThread(void);

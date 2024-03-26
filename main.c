@@ -19,7 +19,7 @@ int main(void)
 	initLcd(lcd_fd);
 	
 	startShutdownManagementThread(lcd_fd);
-	startStraightLineDetectionThread();
+	startStraightLineMonitoringThread();
 	startDistanceMonitoringThread(dist_fd);
 	startLoggerThread();
 	startHeadAngleControlThread();

@@ -34,7 +34,7 @@ void startControlRobot(void)
 			setMotorXy(0.0, 0.0);
 		}
 		else if (isfinite(line_dist)) {
-			if (getStraightLineDetection()) {
+			if (getInStraightLine()) {
 				last_straight_time = now;
 			}
 			if (line_dist != 0.0) {
