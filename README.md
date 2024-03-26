@@ -1,6 +1,6 @@
 # JLTC
 JLTC is a control program for self-propelled robots.
-Reference Book ISBN: 978-4-297-11299-8
+- Reference Book ISBN: 978-4-297-11299-8
 
 # Environment
 - Model: Raspberry Pi 4 Model B Rev 1.2
@@ -10,6 +10,3 @@ Reference Book ISBN: 978-4-297-11299-8
 - WiringPi
 - OpenCV
 - Picamera
-
-# TODO
-- Create a map from driving data.
