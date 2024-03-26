@@ -7,7 +7,7 @@ SRCS = \
 	distance.c \
 	led.c \
 	line.c \
-	logger.c \
+	log.c \
 	main.c \
 	motor.c \
 	position.c \
