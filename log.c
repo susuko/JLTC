@@ -41,17 +41,17 @@ static void initLoggerPipe(void)
 // Example: logPrintf("command", "%d, %d", 1, 2);
 int logPrintf(char *cmd, char *fmt, ...)
 {
-    va_list ap;
-    va_start(ap, fmt);
-    
-    int len = 0;
-    len += fprintf(in_pipe, "%010u, ", millis());
-    len += fprintf(in_pipe, "%s, ", cmd);
-    len += vfprintf(in_pipe, fmt, ap);
-    len += fprintf(in_pipe, "\n");
-    
-    va_end(ap);
-    return len < PIPE_BUF ? 0 : -1;
+	va_list ap;
+	va_start(ap, fmt);
+	
+	int len = 0;
+	len += fprintf(in_pipe, "%010u, ", millis());
+	len += fprintf(in_pipe, "%s, ", cmd);
+	len += vfprintf(in_pipe, fmt, ap);
+	len += fprintf(in_pipe, "\n");
+	
+	va_end(ap);
+	return len < PIPE_BUF ? 0 : -1;
 }
 
 void startLoggerThread(void)
