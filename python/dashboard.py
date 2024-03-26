@@ -178,7 +178,7 @@ class Dashboard(tk.Tk):
             "getLineSensor": self.update_get_line_sensor,
             "setServo": self.update_set_servo,
             "distanceMonitoringThread": self.update_distance_monitoring_thread,
-            "locationManagementThread": self.update_location_management_thread,
+            "positionMonitoringThread": self.update_position_monitoring_thread,
             "straightLineMonitoringThread": self.update_straight_line_monitoring_thread
         })
         for line in fileinput.input():
@@ -205,7 +205,7 @@ class Dashboard(tk.Tk):
         dist = float(args[0])
         self.dist_label.config(text=self.DIST_TEXT_FORMAT % dist)
 
-    def update_location_management_thread(self, args):
+    def update_position_monitoring_thread(self, args):
         pos = tuple(map(float, args))
         self.pos_label.config(text=self.POS_TEXT_FORMAT % pos)
 

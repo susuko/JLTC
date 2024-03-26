@@ -23,7 +23,7 @@ int main(void)
 	startDistanceMonitoringThread(dist_fd);
 	startLoggerThread();
 	startHeadAngleControlThread();
-	startLocationManagementThread();
+	startPositionMonitoringThread();
 	
 	// playStartBeep();
 	

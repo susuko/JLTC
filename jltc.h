@@ -86,6 +86,6 @@ void startDistanceMonitoringThread(int dist_fd);
 int getDistanceWarning(void);
 
 // position
-void startLocationManagementThread();
+void startPositionMonitoringThread();
 
 #endif

@@ -19,24 +19,24 @@ static t_vec3 calcPos(t_vec3 pos, double delta_t, t_vec2 motor_lr, double max_v,
 	};
 }
 
-static PI_THREAD (locationManagementThread)
+static PI_THREAD (positionMonitoringThread)
 {
-	const double speed = 0.3; // [m/s]
+	const double max_speed = 0.3; // [m/s]
 	const double wheel_dist = 0.1; // [m]
 	
-	uint32_t prev_time = millis();
+	uint32_t prev_ms = millis();
 	t_vec3 pos = { 0, 0, 0 };
 	
 	unsigned log_limit_count = 0;
 	t_vec3 last_log_pos = pos;
 	
 	while (1) {
-		uint32_t now = millis();
-		double delta_time = (now - prev_time) / 1000.0;
-		pos = calcPos(pos, delta_time, getMotor(), speed, wheel_dist);
+		uint32_t now_ms = millis();
+		double delta_time = (now_ms - prev_ms) / 1000.0;
+		pos = calcPos(pos, delta_time, getMotor(), max_speed, wheel_dist);
 		
 		if (log_limit_count >= 10 && !vec3Eq(last_log_pos, pos)) {
-			logPrintf("locationManagementThread", "%f, %f, %f", pos.x, pos.y, pos.z);
+			logPrintf("positionMonitoringThread", "%f, %f, %f", pos.x, pos.y, pos.z);
 			log_limit_count = 0;
 			last_log_pos = pos;
 		}
@@ -44,13 +44,13 @@ static PI_THREAD (locationManagementThread)
 			log_limit_count++;
 		}
 		
-		prev_time = now;
+		prev_ms = now_ms;
 		delay(10);
 	}
 	return NULL;
 }
 
-void startLocationManagementThread()
+void startPositionMonitoringThread()
 {
-	piThreadCreate(locationManagementThread);
+	piThreadCreate(positionMonitoringThread);
 }
