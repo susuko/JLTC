@@ -20,6 +20,9 @@
 #define NINEPX_PATH "python/9px.py"
 #define VIEWER_PATH "python/dashboard.py"
 
+// logger setting
+#define LOG_ENABLE 1
+
 // vector
 typedef struct s_vec2 {
 	double x;

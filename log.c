@@ -5,7 +5,6 @@
 #include <wiringPi.h>
 #include <jltc.h>
 
-#define LOG_ENABLE 1
 #define LOG_BUF_SIZE PIPE_BUF
 
 static FILE *in_pipe, *out_pipe;
