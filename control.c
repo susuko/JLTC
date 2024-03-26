@@ -1,7 +1,21 @@
 #include <stdint.h>
 #include <math.h>
 #include <wiringPi.h>
+#include <jeedPi.h>
 #include <jltc.h>
+
+void waitStartButton(int lcd_fd)
+{
+	clearLcd(lcd_fd);
+	putsLcd(lcd_fd, "Push WhiteButton To Start");
+	
+	while (1) {
+		if (getWhiteButton())
+			break;
+	}
+	
+	clearLcd(lcd_fd);
+}
 
 void startControlRobot(void)
 {

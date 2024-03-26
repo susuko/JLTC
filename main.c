@@ -27,6 +27,7 @@ int main(void)
 	
 	// playStartBeep();
 	
+	waitStartButton(lcd_fd);
 	startControlRobot();
 	
 	return 0;

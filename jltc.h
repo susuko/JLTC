@@ -21,6 +21,7 @@
 #define VIEWER_PATH "python/dashboard.py"
 
 // control
+void waitStartButton(int lcd_fd);
 void startControlRobot(void);
 
 // shutdown
