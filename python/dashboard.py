@@ -149,12 +149,12 @@ class Dashboard(tk.Tk):
 
     # Input monitoring from standard input
     def input_thread(self):
-        command_handlers = {
+        command_handlers = defaultdict(lambda: lambda args: None, {
             "setMotor": self.update_set_motor,
             "getLineSensor": self.update_get_line_sensor,
             "nearDistanceWarningThread": self.update_near_distance_warning_thread,
             "locationManagementThread": self.update_location_management_thread
-        }
+        })
         for line in fileinput.input():
             _, command, *args = [s.strip() for s in line.split(",")]
             command_handlers[command](args)
