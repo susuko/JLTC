@@ -19,8 +19,10 @@ static noreturn void shutdown(void)
 
 static PI_THREAD (shutdownManagementThread)
 {
+	const int shutdown_count = 3; // [s]
+	
 	int counter = 0;
-	while(counter < 3) {
+	while(counter < shutdown_count) {
 		counter = getRedButton() ? counter + 1 : 0;
 		delay(1000);
 	}
