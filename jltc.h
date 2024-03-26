@@ -20,6 +20,21 @@
 #define NINEPX_PATH "python/9px.py"
 #define VIEWER_PATH "python/dashboard.py"
 
+// vector
+typedef struct s_vec2 {
+	double x;
+	double y;
+} t_vec2;
+
+typedef struct s_vec3 {
+	double x;
+	double y;
+	double z;
+} t_vec3;
+
+int vec2Eq(t_vec2 a, t_vec2 b);
+int vec3Eq(t_vec3 a, t_vec3 b);
+
 // control
 void waitStartButton(int lcd_fd);
 void startControlRobot(void);
@@ -42,14 +57,8 @@ void startLoggerThread(void);
 int logPrintf(char *cmd, char *fmt, ...);
 
 // line sensor
-typedef struct s_line_sensor {
-	int left;
-	int centor;
-	int right;
-} t_line_sensor;
-
 void initLineSensor(void);
-t_line_sensor getLineSensor(void);
+t_vec3 getLineSensor(void);
 double getLineDist(void);
 
 // button
@@ -60,21 +69,6 @@ int getWhiteButton(void);
 // led
 void initLed(void);
 void setLed(int v);
-
-// vector
-typedef struct s_vec2 {
-	double x;
-	double y;
-} t_vec2;
-
-typedef struct s_vec3 {
-	double x;
-	double y;
-	double z;
-} t_vec3;
-
-int vec2Eq(t_vec2 a, t_vec2 b);
-int vec3Eq(t_vec3 a, t_vec3 b);
 
 // motor
 void initMotor(void);

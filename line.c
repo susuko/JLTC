@@ -5,16 +5,16 @@
 #include <jltc.h>
 
 // return: -1.0 ... 1.0 or INFINITY or NAN
-static double calcLineDist(t_line_sensor line_sensor)
+static double calcLineDist(t_vec3 line_sensor)
 {
-	int count = line_sensor.left + line_sensor.centor + line_sensor.right;
-	double sum = line_sensor.left * -1.0 + line_sensor.right * 1.0;
+	int count = line_sensor.x + line_sensor.y + line_sensor.z;
+	double sum = line_sensor.x * -1.0 + line_sensor.z * 1.0;
 	double avg = sum / count;
 	
-	if (line_sensor.left && line_sensor.right) {
+	if (line_sensor.x && line_sensor.z) {
 		return NAN;
 	}
-	else if (!line_sensor.left && !line_sensor.centor && !line_sensor.right) {
+	else if (!line_sensor.x && !line_sensor.y && !line_sensor.z) {
 		return INFINITY;
 	}
 	else {
@@ -26,30 +26,31 @@ static double calcLineDist(t_line_sensor line_sensor)
 static int testCalcLineDist(void)
 {
 	int result = 1;
-	result = result && isinf ( calcLineDist((t_line_sensor){ 0, 0, 0 }));
-	result = result && +1.0 == calcLineDist((t_line_sensor){ 0, 0, 1 });
-	result = result && +0.0 == calcLineDist((t_line_sensor){ 0, 1, 0 });
-	result = result && +0.5 == calcLineDist((t_line_sensor){ 0, 1, 1 });
-	result = result && -1.0 == calcLineDist((t_line_sensor){ 1, 0, 0 });
-	result = result && isnan ( calcLineDist((t_line_sensor){ 1, 0, 1 }));
-	result = result && -0.5 == calcLineDist((t_line_sensor){ 1, 1, 0 });
-	result = result && isnan ( calcLineDist((t_line_sensor){ 1, 1, 1 }));
+	result = result && isinf ( calcLineDist((t_vec3){ 0, 0, 0 }));
+	result = result && +1.0 == calcLineDist((t_vec3){ 0, 0, 1 });
+	result = result && +0.0 == calcLineDist((t_vec3){ 0, 1, 0 });
+	result = result && +0.5 == calcLineDist((t_vec3){ 0, 1, 1 });
+	result = result && -1.0 == calcLineDist((t_vec3){ 1, 0, 0 });
+	result = result && isnan ( calcLineDist((t_vec3){ 1, 0, 1 }));
+	result = result && -0.5 == calcLineDist((t_vec3){ 1, 1, 0 });
+	result = result && isnan ( calcLineDist((t_vec3){ 1, 1, 1 }));
 	return result;
 }
 
 // White: 1, Black: 0
-t_line_sensor getLineSensor(void)
+// Left: .x, Center: .y, Right: .z
+t_vec3 getLineSensor(void)
 {
-	static t_line_sensor last = { 0, 0, 0 };
+	static t_vec3 last = { 0, 0, 0 };
 	
-	t_line_sensor now = {
-		.left = digitalRead(IO_LN_LE),
-		.centor = !digitalRead(IO_LN_CT), // invert
-		.right = digitalRead(IO_LN_RI)
+	t_vec3 now = {
+		.x = digitalRead(IO_LN_LE),
+		.y = !digitalRead(IO_LN_CT), // invert
+		.z = digitalRead(IO_LN_RI)
 	};
 	
-	if (last.left != now.left || last.centor != now.centor || last.right != now.right) {
-		logPrintf("getLineSensor", "%d, %d, %d", now.left, now.centor, now.right);
+	if (!vec3Eq(last, now)) {
+		logPrintf("getLineSensor", "%.0f, %.0f, %.0f", now.x, now.y, now.z);
 	}
 	last = now;
 	
