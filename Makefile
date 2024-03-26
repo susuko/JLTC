@@ -6,7 +6,7 @@ SRCS = \
 	control.c\
 	distance.c \
 	led.c \
-	line_sensor.c \
+	line.c \
 	logger.c \
 	main.c \
 	motor.c \
