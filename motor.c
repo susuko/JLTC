@@ -7,7 +7,7 @@
 
 static const int pwm_range = 4;
 
-static double last_left = 0, last_right = 0;
+static t_vec2 _last_lr = { 0, 0 };
 
 static t_vec2 xyToLr(t_vec2 xy)
 {
@@ -51,33 +51,32 @@ static int testXyToLr(void)
 }
 
 // left, right: -1.0 ... 1.0
-void setMotor(double left, double right)
+void setMotor(t_vec2 lr)
 {
-	int left_value = (int)round(fabs(left) * pwm_range);
-	int right_value = (int)round(fabs(right) * pwm_range);
+	int left_value = (int)round(fabs(lr.x) * pwm_range);
+	int right_value = (int)round(fabs(lr.y) * pwm_range);
 	
-	if (last_left != left || last_right != right) {
-		last_left = left;
-		last_right = right;
-		logPrintf("setMotor", "%.2f, %.2f", left, right);
+	if (!vec2Eq(_last_lr, lr)) {
+		logPrintf("setMotor", "%.2f, %.2f", lr.x, lr.y);
 	}
 	
-	softPwmWrite(IO_MT_L1, left > 0 ? left_value : 0);
-	softPwmWrite(IO_MT_L2, left < 0 ? left_value : 0);
-	softPwmWrite(IO_MT_R1, right > 0 ? right_value : 0);
-	softPwmWrite(IO_MT_R2, right < 0 ? right_value : 0);
+	softPwmWrite(IO_MT_L1, lr.x > 0 ? left_value : 0);
+	softPwmWrite(IO_MT_L2, lr.x < 0 ? left_value : 0);
+	softPwmWrite(IO_MT_R1, lr.y > 0 ? right_value : 0);
+	softPwmWrite(IO_MT_R2, lr.y < 0 ? right_value : 0);
+	
+	_last_lr = lr;
 }
 
 // x, y: -1.0 ... 1.0
-void setMotorXy(double x, double y)
+void setMotorXy(t_vec2 xy)
 {
-	t_vec2 lr = xyToLr((t_vec2){ x, y });
-	setMotor(lr.x, lr.y);
+	setMotor(xyToLr(xy));
 }
 
 t_vec2 getMotor(void)
 {
-	return (t_vec2){ last_left, last_right };
+	return _last_lr;
 }
 
 void initMotor(void)

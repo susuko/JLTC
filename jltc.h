@@ -72,8 +72,8 @@ void setLed(int v);
 
 // motor
 void initMotor(void);
-void setMotor(double left, double right);
-void setMotorXy(double x, double y);
+void setMotor(t_vec2 lr);
+void setMotorXy(t_vec2 xy);
 t_vec2 getMotor(void);
 
 // servo

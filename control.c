@@ -29,9 +29,10 @@ void startControlRobot(void)
 	while (1) {
 		uint32_t now = millis() - start_time;
 		double line_dist = getLineDist();
+		t_vec2 motor_xy = { 0, 0 };
 		
 		if (getDistanceWarning()) {
-			setMotorXy(0.0, 0.0);
+			motor_xy = (t_vec2) { 0.0, 0.0 };
 		}
 		else if (isfinite(line_dist)) {
 			if (getInStraightLine()) {
@@ -43,26 +44,28 @@ void startControlRobot(void)
 			}
 			
 			if (now < last_straight_time + time_limit) {
-				setMotorXy(line_dist * 0.25, 1.0);
+				motor_xy = (t_vec2) { line_dist * 0.25, 1.0 };
 			}
 			else {
-				setMotorXy(line_dist * 0.75, 1.0);
+				motor_xy = (t_vec2) { line_dist * 0.75, 1.0 };
 			}
 		}
 		else {
 			if (now < last_dir_time + time_limit) {
-				setMotorXy(last_dir * 0.75, 1.0);
+				motor_xy = (t_vec2) { last_dir * 0.75, 1.0 };
 			}
 			else if (now < last_dir_time + time_limit * 2) {
-				setMotorXy(last_dir * 0.75, -1.0);
+				motor_xy = (t_vec2) { last_dir * 0.75, -1.0 };
 			}
 			else if (now < last_dir_time + time_limit * 3) {
-				setMotorXy(last_dir * -0.75, 1.0);
+				motor_xy = (t_vec2) { last_dir * -0.75, 1.0 };
 			}
 			else {
-				setMotorXy(0.0, 0.0);
+				motor_xy = (t_vec2) { 0.0, 0.0 };
 			}
 		}
+		
+		setMotorXy(motor_xy);
 		
 		delay(10);
 	}
