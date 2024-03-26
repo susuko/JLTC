@@ -16,12 +16,6 @@ static const int max_level = 16;
 // Mounting angle when pulse is 0.5ms (Degree)
 static const int mounting_degree = 35;
 
-void initServo(void)
-{
-	pinMode(IO_SV, OUTPUT);
-	softPwmCreate(IO_SV, 0, pwm_range);
-}
-
 static void setServoRaw(int level)
 {
 	if (level < min_level) {
@@ -70,6 +64,12 @@ void setServo(double angle)
 	delay(cycle_ms * 3);
 	
 	stopServo();
+}
+
+void initServo(void)
+{
+	pinMode(IO_SV, OUTPUT);
+	softPwmCreate(IO_SV, 0, pwm_range);
 }
 
 static PI_THREAD (headAngleControlThread)
