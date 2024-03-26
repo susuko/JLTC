@@ -30,6 +30,7 @@ class Dashboard(tk.Tk):
     SERVO_TEXT_FORMAT = "> SERVO: %.2f[RAD]"
     DIST_TEXT_FORMAT = "> DISTANCE: %.2f[CM]"
     POS_TEXT_FORMAT = "> POSITION: %f, %f, %f"
+    STRAIGHT_TEXT_FORMAT = "> STRAIGHT: %r"
 
     # Rect constant
     BOARD_RECT = Rect(Point(0, 0), Size(100, 200))
@@ -63,6 +64,7 @@ class Dashboard(tk.Tk):
         self.create_servo_label(info_inner_frame)
         self.create_distance_label(info_inner_frame)
         self.create_position_label(info_inner_frame)
+        self.create_straight_label(info_inner_frame)
 
         # Initialize input thread
         Thread(target=self.input_thread).start()
@@ -159,6 +161,16 @@ class Dashboard(tk.Tk):
         )
         self.pos_label.pack(anchor="w")
 
+    def create_straight_label(self, parent):
+        self.straight_label = tk.Label(
+            parent,
+            text=self.STRAIGHT_TEXT_FORMAT % False,
+            bg=self.BG_COLOR,
+            fg=self.FONT_COLOR,
+            font=self.FONT
+        )
+        self.straight_label.pack(anchor="w")
+
     # Input monitoring from standard input
     def input_thread(self):
         command_handlers = defaultdict(lambda: lambda args: None, {
@@ -166,7 +178,8 @@ class Dashboard(tk.Tk):
             "getLineSensor": self.update_get_line_sensor,
             "setServo": self.update_set_servo,
             "nearDistanceWarningThread": self.update_near_distance_warning_thread,
-            "locationManagementThread": self.update_location_management_thread
+            "locationManagementThread": self.update_location_management_thread,
+            "straightLineDetectionThread": self.update_straight_line_detection_thread
         })
         for line in fileinput.input():
             _, command, *args = [s.strip() for s in line.split(",")]
@@ -195,6 +208,10 @@ class Dashboard(tk.Tk):
     def update_location_management_thread(self, args):
         pos = tuple(map(float, args))
         self.pos_label.config(text=self.POS_TEXT_FORMAT % pos)
+
+    def update_straight_line_detection_thread(self, args):
+        straight = bool(args[0])
+        self.straight_label.config(text=self.STRAIGHT_TEXT_FORMAT % straight)
 
 if __name__ == "__main__":
     app = Dashboard()

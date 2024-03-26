@@ -23,7 +23,13 @@ static PI_THREAD (straightLineDetectionThread)
 		for (int i = 0; i < 9; i++) {
 			fscanf(ninepx_fp, "%d", &px[i]);
 		}
-		straight_line_detection = detectStraightLine(px);
+		
+		int now_straight_line_detection = detectStraightLine(px);
+		if (straight_line_detection != now_straight_line_detection) {
+			logPrintf("straightLineDetectionThread", "%d", now_straight_line_detection);
+		}
+		straight_line_detection = now_straight_line_detection;
+		
 		delay(50);
 	}
 	return NULL;
