@@ -38,12 +38,26 @@ static void stopServo(void)
 	softPwmWrite(IO_SV, 0);
 }
 
+static void logSetServo(double now_angle)
+{
+	static double last_angle = 0;
+	
+	if (last_angle != now_angle) {
+		logPrintf("setServo", "%f", now_angle);
+	}
+	
+	last_angle = now_angle;
+}
+
 // angle: -PI/2 ... PI/2 [rad]
 void setServo(double angle)
 {
 	if (angle < -M_PI_2 || angle > M_PI_2) {
 		return;
 	}
+	
+	logSetServo(angle);
+	
 	double angle_unit = M_PI / (sg90_max_level - sg90_min_level);
 	double mounting_angle = (M_PI / 180) * mounting_degree;
 	double offset_angle = M_PI_2 - mounting_angle;
