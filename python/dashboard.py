@@ -27,6 +27,7 @@ class Dashboard(tk.Tk):
     # Text format constant
     TIRE_TEXT_FORMAT = "%3d\n[%%]"
     DIST_TEXT_FORMAT = "> DISTANCE: %.2f[CM]"
+    POS_TEXT_FORMAT = "> POSITION: %f, %f, %f"
 
     # Rect constant
     BOARD_RECT = Rect(Point(0, 0), Size(100, 200))
@@ -57,6 +58,7 @@ class Dashboard(tk.Tk):
         info_inner_frame = tk.Frame(info_frame, bg=self.BG_COLOR)
         info_inner_frame.pack(side="left", padx=10, pady=10, fill="y")
         self.create_distance_label(info_inner_frame)
+        self.create_position_label(info_inner_frame)
 
         # Initialize input thread
         Thread(target=self.input_thread).start()
@@ -121,14 +123,24 @@ class Dashboard(tk.Tk):
             fg=self.FONT_COLOR,
             font=self.FONT
         )
-        self.dist_label.pack()
+        self.dist_label.pack(anchor="w")
+
+    def create_position_label(self, parent):
+        self.pos_label = tk.Label(
+            parent,
+            text=self.POS_TEXT_FORMAT % (0, 0, 0),
+            bg=self.BG_COLOR,
+            fg=self.FONT_COLOR,
+            font=self.FONT
+        )
+        self.pos_label.pack(anchor="w")
 
     # Input monitoring from standard input
     def input_thread(self):
         command_handlers = {
             "setMotor": self.update_set_motor,
             "nearDistanceWarningThread": self.update_near_distance_warning_thread,
-            "locationManagementThread": lambda args: None
+            "locationManagementThread": self.update_location_management_thread
         }
         for line in fileinput.input():
             _, command, *args = [s.strip() for s in line.split(",")]
@@ -145,6 +157,10 @@ class Dashboard(tk.Tk):
     def update_near_distance_warning_thread(self, args):
         dist = float(args[0])
         self.dist_label.config(text=self.DIST_TEXT_FORMAT % dist)
+
+    def update_location_management_thread(self, args):
+        pos = tuple(map(float, args))
+        self.pos_label.config(text=self.POS_TEXT_FORMAT % pos)
 
 if __name__ == "__main__":
     app = Dashboard()
