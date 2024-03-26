@@ -74,22 +74,24 @@ void setServo(double angle)
 
 static PI_THREAD (headAngleControlThread)
 {
-	const double diff_th = 1.0;
-	const double servo_angle = M_PI / 6.0;
+	const double lr_diff_th = 1.0;
+	const double target_angle = M_PI / 6.0;
 	
 	double prev_angle = 0;
 	
 	while (1) {
 		t_vec2 lr = getMotor();
-		double diff = lr.y - lr.x;
-		double angle = diff > diff_th
-			? servo_angle
-			: diff < -diff_th
-				? -servo_angle
-				: 0;
+		double lr_diff = lr.y - lr.x;
+		double lr_diff_sign = lr_diff < 0 ? -1 : 1;
+		
+		double angle = fabs(lr_diff) > lr_diff_th
+			? target_angle * lr_diff_sign
+			: 0;
+		
 		if (prev_angle != angle)
 			setServo(angle);
 		prev_angle = angle;
+		
 		delay(1000);
 	}
 	
