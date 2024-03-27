@@ -6,9 +6,9 @@
 
 // Duration constant [ms]
 static const uint32_t in_straight_line_duration = 500;
-static const uint32_t turn_main_duration = 500;
-static const uint32_t turn_recovery_duration = 500;
-static const uint32_t turn_retry_duration = 500;
+static const uint32_t turn_main_duration = 750;
+static const uint32_t turn_recovery_duration = 750;
+static const uint32_t turn_retry_duration = 750;
 
 typedef enum e_turn_state {
 	TURN_MAIN,
@@ -48,7 +48,7 @@ static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 		return (t_vec2) { line_dist * 0.25, 1.0 };
 	}
 	else {
-		return (t_vec2) { line_dist * 0.75, 1.0 };
+		return (t_vec2) { line_dist * 0.50, 1.0 };
 	}
 }
 
