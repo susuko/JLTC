@@ -3,13 +3,8 @@
 #include <jeedPi.h>
 #include <jltc.h>
 
-int main(void)
+void init(int lcd_fd, int dist_fd)
 {
-	wiringPiSetupGpio();
-	
-	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
-	int dist_fd = wiringPiI2CSetup(GP2Y0E03_ADR);
-	
 	initButton();
 	initLed();
 	initBuzzer();
@@ -18,12 +13,22 @@ int main(void)
 	initServo();
 	initLcd(lcd_fd);
 	
+	startLoggerThread();
 	startShutdownManagementThread(lcd_fd);
 	startStraightLineMonitoringThread();
 	startDistanceMonitoringThread(dist_fd);
-	startLoggerThread();
 	startHeadAngleControlThread();
 	startPositionMonitoringThread();
+}
+
+int main(void)
+{
+	wiringPiSetupGpio();
+	
+	int lcd_fd = wiringPiI2CSetup(AQM1602_ADR);
+	int dist_fd = wiringPiI2CSetup(GP2Y0E03_ADR);
+	
+	init(lcd_fd, dist_fd);
 	
 	// playStartBeep();
 	
