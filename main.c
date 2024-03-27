@@ -30,7 +30,7 @@ int main(void)
 	
 	init(lcd_fd, dist_fd);
 	
-	// playStartBeep();
+	playStartBeep();
 	
 	waitStartButton(lcd_fd);
 	startControlRobot();
