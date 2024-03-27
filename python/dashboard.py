@@ -26,11 +26,11 @@ class Dashboard(tk.Tk):
 
     # Text format constant
     TIRE_TEXT_FORMAT = "%3d\n[%%]"
-    LSEN_TEXT_FORMAT = "> LINE_SENSOR: %d, %d, %d"
+    LINE_SENSOR_TEXT_FORMAT = "> LINE_SENSOR: %d, %d, %d"
     SERVO_TEXT_FORMAT = "> SERVO: %.2f[RAD]"
-    DIST_TEXT_FORMAT = "> DISTANCE: %.2f[CM]"
-    POS_TEXT_FORMAT = "> POSITION: %f, %f, %f"
-    STRAIGHT_TEXT_FORMAT = "> STRAIGHT: %r"
+    DISTANCE_TEXT_FORMAT = "> DISTANCE: %.2f[CM]"
+    POSITION_TEXT_FORMAT = "> POSITION: %f, %f, %f"
+    STRAIGHT_LINE_TEXT_FORMAT = "> STRAIGHT_LINE: %r"
 
     # Rect constant
     BOARD_RECT = Rect(Point(0, 0), Size(100, 200))
@@ -60,11 +60,21 @@ class Dashboard(tk.Tk):
         info_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
         info_inner_frame = tk.Frame(info_frame, bg=self.BG_COLOR)
         info_inner_frame.pack(side="left", padx=10, pady=10, fill="y")
-        self.create_line_sensor_label(info_inner_frame)
-        self.create_servo_label(info_inner_frame)
-        self.create_distance_label(info_inner_frame)
-        self.create_position_label(info_inner_frame)
-        self.create_straight_label(info_inner_frame)
+        self.line_sensor_label = self.create_label(
+            info_inner_frame, self.LINE_SENSOR_TEXT_FORMAT % (0, 0, 0)
+        )
+        self.servo_label = self.create_label(
+            info_inner_frame, self.SERVO_TEXT_FORMAT % 0
+        )
+        self.distance_label = self.create_label(
+            info_inner_frame, self.DISTANCE_TEXT_FORMAT % 0
+        )
+        self.position_label = self.create_label(
+            info_inner_frame, self.POSITION_TEXT_FORMAT % (0, 0, 0)
+        )
+        self.straight_line_label = self.create_label(
+            info_inner_frame, self.STRAIGHT_LINE_TEXT_FORMAT % False
+        )
 
         # Initialize input thread
         Thread(target=self.input_thread).start()
@@ -121,55 +131,12 @@ class Dashboard(tk.Tk):
             )
         ]
 
-    def create_line_sensor_label(self, parent):
-        self.lsen_label = tk.Label(
-            parent,
-            text=self.LSEN_TEXT_FORMAT % (0, 0, 0),
-            bg=self.BG_COLOR,
-            fg=self.FONT_COLOR,
-            font=self.FONT
+    def create_label(self, parent, text):
+        label = tk.Label(
+            parent, text=text, bg=self.BG_COLOR, fg=self.FONT_COLOR, font=self.FONT
         )
-        self.lsen_label.pack(anchor="w")
-
-    def create_servo_label(self, parent):
-        self.servo_label = tk.Label(
-            parent,
-            text=self.SERVO_TEXT_FORMAT % 0,
-            bg=self.BG_COLOR,
-            fg=self.FONT_COLOR,
-            font=self.FONT
-        )
-        self.servo_label.pack(anchor="w")
-
-    def create_distance_label(self, parent):
-        self.dist_label = tk.Label(
-            parent,
-            text=self.DIST_TEXT_FORMAT % 0,
-            bg=self.BG_COLOR,
-            fg=self.FONT_COLOR,
-            font=self.FONT
-        )
-        self.dist_label.pack(anchor="w")
-
-    def create_position_label(self, parent):
-        self.pos_label = tk.Label(
-            parent,
-            text=self.POS_TEXT_FORMAT % (0, 0, 0),
-            bg=self.BG_COLOR,
-            fg=self.FONT_COLOR,
-            font=self.FONT
-        )
-        self.pos_label.pack(anchor="w")
-
-    def create_straight_label(self, parent):
-        self.straight_label = tk.Label(
-            parent,
-            text=self.STRAIGHT_TEXT_FORMAT % False,
-            bg=self.BG_COLOR,
-            fg=self.FONT_COLOR,
-            font=self.FONT
-        )
-        self.straight_label.pack(anchor="w")
+        label.pack(anchor="w")
+        return label
 
     # Input monitoring from standard input
     def input_thread(self):
@@ -194,24 +161,24 @@ class Dashboard(tk.Tk):
         self.canvas.itemconfig(self.right_tire_text, text=right_text)
 
     def update_get_line_sensor(self, args):
-        lsen = tuple(map(int, args))
-        self.lsen_label.config(text=self.LSEN_TEXT_FORMAT % lsen)
+        line_sensor = tuple(map(int, args))
+        self.line_sensor_label.config(text=self.LINE_SENSOR_TEXT_FORMAT % line_sensor)
 
     def update_set_servo(self, args):
         servo = float(args[0])
         self.servo_label.config(text=self.SERVO_TEXT_FORMAT % servo)
 
     def update_distance_monitoring_thread(self, args):
-        dist = float(args[0])
-        self.dist_label.config(text=self.DIST_TEXT_FORMAT % dist)
+        distance = float(args[0])
+        self.distance_label.config(text=self.DISTANCE_TEXT_FORMAT % distance)
 
     def update_position_monitoring_thread(self, args):
-        pos = tuple(map(float, args))
-        self.pos_label.config(text=self.POS_TEXT_FORMAT % pos)
+        position = tuple(map(float, args))
+        self.position_label.config(text=self.POSITION_TEXT_FORMAT % position)
 
     def update_straight_line_monitoring_thread(self, args):
-        straight = bool(args[0])
-        self.straight_label.config(text=self.STRAIGHT_TEXT_FORMAT % straight)
+        straight_line = bool(args[0])
+        self.straight_line_label.config(text=self.STRAIGHT_LINE_TEXT_FORMAT % straight_line)
 
 if __name__ == "__main__":
     app = Dashboard()
