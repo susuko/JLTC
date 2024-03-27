@@ -15,15 +15,15 @@
 #define IO_MT_L1	25
 #define IO_SW_WT	27
 
-// python
+// Python path
 #define PYTHON_PATH "python/venv/bin/python3"
 #define NINEPX_PATH "python/9px.py"
 #define VIEWER_PATH "python/dashboard.py"
 
-// logger setting
+// Logger setting
 #define LOG_ENABLE 1
 
-// vector
+// Vector
 typedef struct s_vec2 {
 	double x;
 	double y;
@@ -38,57 +38,57 @@ typedef struct s_vec3 {
 int vec2Eq(t_vec2 a, t_vec2 b);
 int vec3Eq(t_vec3 a, t_vec3 b);
 
-// control
-void waitStartButton(int lcd_fd);
-void startControlRobot(void);
-
-// shutdown
-void startShutdownManagementThread(int lcd_fd);
-
-// buzzer
-void initBuzzer(void);
-void setBuzzer(int hz, int ms);
-void playStartBeep(void);
-void playEndBeep(void);
-
-// straight line
-void startStraightLineMonitoringThread();
-int getInStraightLine(void);
-
-// logger
-void startLoggerThread(void);
-int logPrintf(char *cmd, char *fmt, ...);
-
-// line sensor
-void initLineSensor(void);
-t_vec3 getLineSensor(void);
-double getLineDist(void);
-
-// button
+// Button
 void initButton(void);
 int getRedButton(void);
 int getWhiteButton(void);
 
-// led
+// Led
 void initLed(void);
 void setLed(int v);
 
-// motor
+// Line sensor
+void initLineSensor(void);
+t_vec3 getLineSensor(void);
+double getLineDist(void);
+
+// Motor
 void initMotor(void);
 void setMotor(t_vec2 lr);
 void setMotorXy(t_vec2 xy);
 t_vec2 getMotor(void);
 
-// servo
+// Buzzer
+void initBuzzer(void);
+void setBuzzer(int hz, int ms);
+void playStartBeep(void);
+void playEndBeep(void);
+
+// Control
+void waitStartButton(int lcd_fd);
+void startControlRobot(void);
+
+// Straight line monitoring
+void startStraightLineMonitoringThread();
+int getInStraightLine(void);
+
+// Servo, Haed angle control
+void startHeadAngleControlThread(void);
 void initServo(void);
 void setServo(double angle);
-void startHeadAngleControlThread(void);
 
-// distance monitoring
+// Distance monitoring
 void startDistanceMonitoringThread(int dist_fd);
 int getDistanceWarning(void);
 
-// position
+// Logger
+void startLoggerThread(void);
+int logPrintf(char *cmd, char *fmt, ...);
+
+// Position monitoring
 void startPositionMonitoringThread();
+
+// Shutdown management
+void startShutdownManagementThread(int lcd_fd);
 
 #endif
