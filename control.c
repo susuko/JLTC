@@ -17,9 +17,9 @@ typedef enum e_turn_state {
 	TURN_STOP,
 } t_turn_state;
 
-static t_turn_state getTurnState(uint32_t now_ms, uint32_t last_dir_time)
+static t_turn_state getTurnState(uint32_t now_ms, uint32_t last_in_line_time)
 {
-	uint32_t time_sum = last_dir_time;
+	uint32_t time_sum = last_in_line_time;
 	
 	if ((time_sum += turn_main_duration) >= now_ms) {
 		return TURN_MAIN;
@@ -52,9 +52,9 @@ static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 	}
 }
 
-static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_dir_time)
+static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_in_line_time)
 {
-	switch (getTurnState(now_ms, last_dir_time)) {
+	switch (getTurnState(now_ms, last_in_line_time)) {
 	case TURN_MAIN:
 		return (t_vec2) { last_dir * 0.75, 1.0 };
 	
@@ -73,7 +73,7 @@ static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_di
 static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
 {
 	static int last_dir = 0;
-	static int64_t last_dir_time = -1;
+	static int64_t last_in_line_time = -1;
 	
 	if (getDistanceWarning()) {
 		return (t_vec2) { 0.0, 0.0 };
@@ -82,12 +82,12 @@ static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
 	if (isfinite(line_dist)) {
 		if (line_dist != 0) {
 			last_dir = line_dist < 0 ? -1 : 1;
-			last_dir_time = now_ms;
 		}
+		last_in_line_time = now_ms;
 		return calcMotorXyInLine(now_ms, line_dist);
 	}
-	else if (last_dir_time >= 0) {
-		return calcMotorXyOutLine(now_ms, last_dir, last_dir_time);
+	else if (last_in_line_time >= 0 && last_dir != 0) {
+		return calcMotorXyOutLine(now_ms, last_dir, last_in_line_time);
 	}
 	
 	return (t_vec2) { 0.0, 0.0 };
