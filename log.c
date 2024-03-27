@@ -14,11 +14,9 @@ static PI_THREAD (loggerThread)
 {
 	char buf[LOG_BUF_SIZE];
 	while (fgets(buf, sizeof(buf), out_pipe)) {
-		if (LOG_ENABLE) {
-			printf("%s", buf);
-			fprintf(viewer_fp, "%s", buf);
-			fflush(viewer_fp);
-		}
+		printf("%s", buf);
+		fprintf(viewer_fp, "%s", buf);
+		fflush(viewer_fp);
 	}
 	
 	return NULL;
@@ -41,6 +39,8 @@ static void initLoggerPipe(void)
 // Example: logPrintf("command", "%d, %d", 1, 2);
 int logPrintf(char *cmd, char *fmt, ...)
 {
+	#if LOG_ENABLE == 1
+	
 	va_list ap;
 	va_start(ap, fmt);
 	
@@ -52,11 +52,21 @@ int logPrintf(char *cmd, char *fmt, ...)
 	
 	va_end(ap);
 	return len < PIPE_BUF ? 0 : -1;
+	
+	#else
+	
+	return 0;
+	
+	#endif
 }
 
 void startLoggerThread(void)
 {
+	#if LOG_ENABLE == 1
+	
 	initLoggerPipe();
 	viewer_fp = popen(PYTHON_PATH " " VIEWER_PATH, "w");
 	piThreadCreate(loggerThread);
+	
+	#endif
 }
