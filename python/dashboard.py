@@ -29,8 +29,9 @@ class Dashboard(tk.Tk):
     LINE_SENSOR_TEXT_FORMAT = "> LINE_SENSOR: %d, %d, %d"
     SERVO_TEXT_FORMAT = "> SERVO: %.2f[RAD]"
     DISTANCE_TEXT_FORMAT = "> DISTANCE: %.2f[CM]"
-    POSITION_TEXT_FORMAT = "> POSITION: %f, %f, %f"
+    POSITION_TEXT_FORMAT = "> POSITION: %f[M], %f[M], %f[RAD]"
     STRAIGHT_LINE_TEXT_FORMAT = "> STRAIGHT_LINE: %r"
+    LAST_UPDATED_TIME_TEXT_FORMAT = "> LAST_UPDATED_TIME: %d[MS]"
 
     # Rect constant
     BOARD_RECT = Rect(Point(0, 0), Size(100, 200))
@@ -74,6 +75,9 @@ class Dashboard(tk.Tk):
         )
         self.straight_line_label = self.create_label(
             info_inner_frame, self.STRAIGHT_LINE_TEXT_FORMAT % False
+        )
+        self.last_updated_time_label = self.create_label(
+            info_inner_frame, self.LAST_UPDATED_TIME_TEXT_FORMAT % 0
         )
 
         # Initialize input thread
@@ -149,9 +153,13 @@ class Dashboard(tk.Tk):
             "straightLineMonitoringThread": self.update_straight_line_monitoring_thread
         })
         for line in fileinput.input():
-            _, command, *args = [s.strip() for s in line.split(",")]
+            time_str, command, *args = [s.strip() for s in line.split(",")]
+            self.update_last_update_time(int(time_str))
             command_handlers[command](args)
             sleep(0.001)
+
+    def update_last_update_time(self, time):
+        self.last_updated_time_label.config(text=self.LAST_UPDATED_TIME_TEXT_FORMAT % time)
 
     def update_set_motor(self, args):
         left, right = [int(float(arg) * 100) for arg in args]
