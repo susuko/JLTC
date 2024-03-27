@@ -50,7 +50,7 @@ static PI_THREAD (positionMonitoringThread)
 	return NULL;
 }
 
-void startPositionMonitoringThread()
+void startPositionMonitoringThread(void)
 {
 	piThreadCreate(positionMonitoringThread);
 }

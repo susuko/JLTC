@@ -69,7 +69,7 @@ void waitStartButton(int lcd_fd);
 void startControlRobot(void);
 
 // Straight line monitoring
-void startStraightLineMonitoringThread();
+void startStraightLineMonitoringThread(void);
 int getInStraightLine(void);
 
 // Servo, Haed angle control
@@ -86,7 +86,7 @@ void startLoggerThread(void);
 int logPrintf(char *cmd, char *fmt, ...);
 
 // Position monitoring
-void startPositionMonitoringThread();
+void startPositionMonitoringThread(void);
 
 // Shutdown management
 void startShutdownManagementThread(int lcd_fd);
