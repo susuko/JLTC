@@ -1,11 +1,14 @@
 #include <math.h>
 #include <assert.h>
+#include <pthread.h>
 #include <wiringPi.h>
 #include <softPwm.h>
 #include <jeedPi.h>
 #include <jltc.h>
 
 static const int pwm_range = 4;
+
+static pthread_mutex_t motor_mutex;
 
 static t_vec2 _last_lr = { 0, 0 };
 
@@ -65,7 +68,11 @@ void setMotor(t_vec2 lr)
 	softPwmWrite(IO_MT_R1, lr.y > 0 ? right_value : 0);
 	softPwmWrite(IO_MT_R2, lr.y < 0 ? right_value : 0);
 	
+	pthread_mutex_lock(&motor_mutex);
+	
 	_last_lr = lr;
+	
+	pthread_mutex_unlock(&motor_mutex);
 }
 
 // x, y: -1.0 ... 1.0
@@ -76,7 +83,13 @@ void setMotorXy(t_vec2 xy)
 
 t_vec2 getMotor(void)
 {
-	return _last_lr;
+	pthread_mutex_lock(&motor_mutex);
+	
+	t_vec2 last_lr = _last_lr;
+	
+	pthread_mutex_unlock(&motor_mutex);
+	
+	return last_lr;
 }
 
 void initMotor(void)
