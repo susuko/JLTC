@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <wiringPi.h>
 #include <jeedPi.h>
 #include <jltc.h>
@@ -9,11 +10,22 @@ static int _in_straight_line = 0;
 
 static int detectInStraightLine(int *px)
 {
-	const int black_th = 64, white_th = 96;
+	int max = INT_MIN, min = INT_MAX;
 	
-	return px[0] < black_th && px[1] > white_th && px[2] < black_th
-		&& px[3] < black_th && px[4] > white_th && px[5] < black_th
-		&& px[6] < black_th && px[7] > white_th && px[8] < black_th;
+	for (int i = 0; i < 9; i++) {
+		if (max < px[i]) {
+			max = px[i];
+		}
+		if (min > px[i]) {
+			min = px[i];
+		}
+	}
+	
+	int mid = (max + min) / 2;
+	
+	return px[0] < mid && px[1] > mid && px[2] < mid
+		&& px[3] < mid && px[4] > mid && px[5] < mid
+		&& px[6] < mid && px[7] > mid && px[8] < mid;
 }
 
 static PI_THREAD (straightLineMonitoringThread)
@@ -28,7 +40,10 @@ static PI_THREAD (straightLineMonitoringThread)
 		if (_in_straight_line != new_in_straight_line) {
 			logPrintf("straightLineMonitoringThread", "%d", new_in_straight_line);
 		}
+		
 		_in_straight_line = new_in_straight_line;
+		
+		setLed(_in_straight_line);
 		
 		delay(50);
 	}
