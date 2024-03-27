@@ -1,5 +1,5 @@
 # JLTC
-JLTC is a control program for self-propelled robots.
+JLTC is a control program for line trace cars.
 - Reference Book ISBN: 978-4-297-11299-8
 
 # Environment
