@@ -4,7 +4,12 @@
 #include <jeedPi.h>
 #include <jltc.h>
 
-// pos.x[m], pos.y[m], pos.z[rad], delta_t[s], max_v[m/s], wheel_d[m]
+// pos .x[m], .y[m], .z[rad]: Current position
+// delta_t[s]: Unit time
+// motor_lr .x[left duty ratio], .y[right duty ratio]: Motor duty ratio
+// max_v[m/s] : Maximum speed
+// wheel_d[m] : Wheel distance
+// return: Next position
 static t_vec3 calcPos(t_vec3 pos, double delta_t, t_vec2 motor_lr, double max_v, double wheel_d)
 {
 	double v_l = max_v * motor_lr.x;
