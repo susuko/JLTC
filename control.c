@@ -110,7 +110,7 @@ static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 	}
 }
 
-static t_vec2 calcMotorXy()
+static t_vec2 calcMotorXy(void)
 {
 	static int64_t last_warning_start_time = -1;
 	static int64_t last_in_line_time = -1;
