@@ -93,9 +93,23 @@ static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
 	return (t_vec2) { 0.0, 0.0 };
 }
 
-void startControlRobot(void)
+void startControlRobot(int lcd_fd)
 {
+	clearLcd(lcd_fd);
+	putsLcd(lcd_fd,
+		"Push RedButton  "
+		" To Stop        "
+	);
+	
+	const int STOP_COUNT = 3;
+	
+	int counter = 0;
 	while (1) {
+		counter = getRedButton() ? counter + 1 : 0;
+		if (counter >= STOP_COUNT) {
+			break;
+		}
+		
 		uint32_t now_ms = millis();
 		double line_dist = getLineDist();
 		t_vec2 motor_xy = calcMotorXy(now_ms, line_dist);
@@ -104,12 +118,18 @@ void startControlRobot(void)
 		
 		delay(10);
 	}
+	
+	setMotor((t_vec2) { 0.0, 0.0 });
+	clearLcd(lcd_fd);
 }
 
 void waitStartButton(int lcd_fd)
 {
 	clearLcd(lcd_fd);
-	putsLcd(lcd_fd, "Push WhiteButton To Start");
+	putsLcd(lcd_fd,
+		"Push WhiteButton"
+		" To Start       "
+	);
 	
 	while (1) {
 		if (getWhiteButton())

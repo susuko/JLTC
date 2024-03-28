@@ -32,8 +32,10 @@ int main(void)
 	
 	playStartBeep();
 	
-	waitStartButton(lcd_fd);
-	startControlRobot();
+	while (1) {
+		waitStartButton(lcd_fd);
+		startControlRobot(lcd_fd);
+	}
 	
 	return 0;
 }

@@ -66,7 +66,7 @@ void playEndBeep(void);
 
 // Control
 void waitStartButton(int lcd_fd);
-void startControlRobot(void);
+void startControlRobot(int lcd_fd);
 
 // Straight line monitoring
 void startStraightLineMonitoringThread(void);
