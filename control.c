@@ -5,10 +5,10 @@
 #include <jltc.h>
 
 // Duration constant [ms]
-static const uint32_t in_straight_line_duration = 500;
-static const uint32_t turn_main_duration = 750;
-static const uint32_t turn_recovery_duration = 750;
-static const uint32_t turn_retry_duration = 750;
+static const uint32_t IN_STRAIGHT_LINE_DURATION = 500;
+static const uint32_t TURN_MAIN_DURATION = 750;
+static const uint32_t TURN_RECOVERY_DURATION = 750;
+static const uint32_t TURN_RETRY_DURATION = 750;
 
 typedef enum e_turn_state {
 	TURN_MAIN,
@@ -21,13 +21,13 @@ static t_turn_state getTurnState(uint32_t now_ms, uint32_t last_in_line_time)
 {
 	uint32_t time_sum = last_in_line_time;
 	
-	if ((time_sum += turn_main_duration) >= now_ms) {
+	if ((time_sum += TURN_MAIN_DURATION) >= now_ms) {
 		return TURN_MAIN;
 	}
-	if ((time_sum += turn_recovery_duration) >= now_ms) {
+	if ((time_sum += TURN_RECOVERY_DURATION) >= now_ms) {
 		return TURN_RECOVERY;
 	}
-	if ((time_sum += turn_retry_duration) >= now_ms) {
+	if ((time_sum += TURN_RETRY_DURATION) >= now_ms) {
 		return TURN_RETRY;
 	}
 	return TURN_STOP;
@@ -42,7 +42,7 @@ static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 	}
 	
 	int is_in_straight_line = last_in_straight_line_time >= 0 &&
-		last_in_straight_line_time + in_straight_line_duration >= now_ms;
+		last_in_straight_line_time + IN_STRAIGHT_LINE_DURATION >= now_ms;
 
 	if (is_in_straight_line) {
 		return (t_vec2) { line_dist * 0.25, 1.0 };

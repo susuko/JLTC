@@ -6,7 +6,7 @@
 #include <jeedPi.h>
 #include <jltc.h>
 
-static const int pwm_range = 4;
+static const int PWM_RANGE = 4;
 
 static pthread_mutex_t motor_mutex;
 
@@ -56,8 +56,8 @@ static int testXyToLr(void)
 // left, right: -1.0 ... 1.0
 void setMotor(t_vec2 lr)
 {
-	int left_value = (int)round(fabs(lr.x) * pwm_range);
-	int right_value = (int)round(fabs(lr.y) * pwm_range);
+	int left_value = (int)round(fabs(lr.x) * PWM_RANGE);
+	int right_value = (int)round(fabs(lr.y) * PWM_RANGE);
 	
 	if (!vec2Eq(_last_lr, lr)) {
 		logPrintf("setMotor", "%.2f, %.2f", lr.x, lr.y);
@@ -101,8 +101,8 @@ void initMotor(void)
 	pinMode(IO_MT_L2, OUTPUT);
 	pinMode(IO_MT_L1, OUTPUT);
 	
-	softPwmCreate(IO_MT_R2, 0, pwm_range);
-	softPwmCreate(IO_MT_R1, 0, pwm_range);
-	softPwmCreate(IO_MT_L2, 0, pwm_range);
-	softPwmCreate(IO_MT_L1, 0, pwm_range);
+	softPwmCreate(IO_MT_R2, 0, PWM_RANGE);
+	softPwmCreate(IO_MT_R1, 0, PWM_RANGE);
+	softPwmCreate(IO_MT_L2, 0, PWM_RANGE);
+	softPwmCreate(IO_MT_L1, 0, PWM_RANGE);
 }

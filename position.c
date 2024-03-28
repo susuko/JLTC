@@ -22,8 +22,8 @@ static t_vec3 calcPos(t_vec3 pos, double delta_t, t_vec2 motor_lr, double max_v,
 
 static PI_THREAD (positionMonitoringThread)
 {
-	const double max_speed = 0.3; // [m/s]
-	const double wheel_dist = 0.1; // [m]
+	const double MAX_SPEED = 0.3; // [m/s]
+	const double WHEEL_DIST = 0.1; // [m]
 	
 	uint32_t prev_ms = millis();
 	t_vec3 pos = { 0, 0, 0 };
@@ -34,7 +34,7 @@ static PI_THREAD (positionMonitoringThread)
 	while (1) {
 		uint32_t now_ms = millis();
 		double delta_time = (now_ms - prev_ms) / 1000.0;
-		pos = calcPos(pos, delta_time, getMotor(), max_speed, wheel_dist);
+		pos = calcPos(pos, delta_time, getMotor(), MAX_SPEED, WHEEL_DIST);
 		
 		if (log_limit_count >= 10 && !vec3Eq(last_log_pos, pos)) {
 			logPrintf("positionMonitoringThread", "%f, %f, %f", pos.x, pos.y, pos.z);

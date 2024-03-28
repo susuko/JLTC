@@ -4,7 +4,7 @@
 #include <jltc.h>
 
 // Warning threshold [cm]
-static const double dist_th = 15;
+static const double DIST_TH = 15;
 
 static int _dist_fd;
 static int _distanceWarning = 0;
@@ -15,7 +15,7 @@ static PI_THREAD (distanceMonitoringThread)
 	
 	while (1) {
 		double dist = readDist(_dist_fd);
-		_distanceWarning = dist < dist_th;
+		_distanceWarning = dist < DIST_TH;
 		
 		if (prev_dist != dist) {
 			logPrintf("distanceMonitoringThread", "%.2f", dist);

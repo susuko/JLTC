@@ -6,23 +6,23 @@
 #include <jltc.h>
 
 // Cycle is 20ms (50Hz)
-static const int pwm_range = 200;
+static const int PWM_RANGE = 200;
 // SG-90 limit
-static const int sg90_min_level = 5;
-static const int sg90_max_level = 24;
+static const int SG90_MIN_LEVEL = 5;
+static const int SG90_MAX_LEVEL = 24;
 // Hardware limit
-static const int min_level = 5;
-static const int max_level = 16;
+static const int MIN_LEVEL = 5;
+static const int MAX_LEVEL = 16;
 // Mounting angle when pulse is 0.5ms (Degree)
-static const int mounting_degree = 35;
+static const int MOUNTING_DEGREE = 35;
 
 static void setServoRaw(int level)
 {
-	if (level < min_level) {
-		level = min_level;
+	if (level < MIN_LEVEL) {
+		level = MIN_LEVEL;
 	}
-	if (level > max_level) {
-		level = max_level;
+	if (level > MAX_LEVEL) {
+		level = MAX_LEVEL;
 	}
 	softPwmWrite(IO_SV, level);
 }
@@ -52,15 +52,15 @@ void setServo(double angle)
 	
 	logSetServo(angle);
 	
-	double angle_unit = M_PI / (sg90_max_level - sg90_min_level);
-	double mounting_angle = (M_PI / 180) * mounting_degree;
+	double angle_unit = M_PI / (SG90_MAX_LEVEL - SG90_MIN_LEVEL);
+	double mounting_angle = (M_PI / 180) * MOUNTING_DEGREE;
 	double offset_angle = M_PI_2 - mounting_angle;
-	int level = sg90_min_level + round((angle + offset_angle) / angle_unit);
+	int level = SG90_MIN_LEVEL + round((angle + offset_angle) / angle_unit);
 	
 	setServoRaw(level);
 	
 	// Wait 3 Cycle
-	int cycle_ms = pwm_range / 10;
+	int cycle_ms = PWM_RANGE / 10;
 	delay(cycle_ms * 3);
 	
 	stopServo();
@@ -69,7 +69,7 @@ void setServo(double angle)
 void initServo(void)
 {
 	pinMode(IO_SV, OUTPUT);
-	softPwmCreate(IO_SV, 0, pwm_range);
+	softPwmCreate(IO_SV, 0, PWM_RANGE);
 }
 
 static PI_THREAD (headAngleControlThread)
