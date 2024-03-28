@@ -55,6 +55,8 @@ int logPrintf(char *cmd, char *fmt, ...)
 	
 	#else
 	
+	(void)cmd;
+	(void)fmt;
 	return 0;
 	
 	#endif
@@ -67,6 +69,11 @@ void startLoggerThread(void)
 	initLoggerPipe();
 	viewer_fp = popen(PYTHON_PATH " " VIEWER_PATH, "w");
 	piThreadCreate(loggerThread);
+	
+	#else
+	
+	(void)initLoggerPipe;
+	(void)loggerThread;
 	
 	#endif
 }
