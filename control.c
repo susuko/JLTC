@@ -13,8 +13,7 @@ static const uint32_t TURN_RETRY_DURATION = 750;
 
 typedef enum e_warning_state {
 	WARNING_BACK,
-	WARNING_STOP,
-	WARNING_NONE
+	WARNING_STOP
 } t_warning_state;
 
 typedef enum e_turn_state {
@@ -24,16 +23,25 @@ typedef enum e_turn_state {
 	TURN_STOP,
 } t_turn_state;
 
-static t_warning_state getWarningState(uint32_t now_ms, uint32_t last_warning_time, int warning)
+static t_warning_state getWarningState(uint32_t now_ms, uint32_t last_warning_time)
 {
 	if (last_warning_time + WARNING_BACK_DURATION >= now_ms) {
 		return WARNING_BACK;
 	}
-	else if (warning) {
+	else {
 		return WARNING_STOP;
 	}
-	else {
-		return WARNING_NONE;
+}
+
+static t_vec2 calcMotorXyInWarning(uint32_t now_ms, uint32_t last_warning_time)
+{
+	switch (getWarningState(now_ms, last_warning_time)) {
+	case WARNING_BACK:
+		return (t_vec2) { 0.0, -1.0 };
+	
+	case WARNING_STOP:
+	default:
+		return (t_vec2) { 0.0, 0.0 };
 	}
 }
 
@@ -51,6 +59,24 @@ static t_turn_state getTurnState(uint32_t now_ms, uint32_t last_in_line_time)
 		return TURN_RETRY;
 	}
 	return TURN_STOP;
+}
+
+static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_in_line_time)
+{
+	switch (getTurnState(now_ms, last_in_line_time)) {
+	case TURN_MAIN:
+		return (t_vec2) { last_dir * 0.75, 1.0 };
+	
+	case TURN_RECOVERY:
+		return (t_vec2) { last_dir * 0.75, -1.0 };
+	
+	case TURN_RETRY:
+		return (t_vec2) { last_dir * -0.75, 1.0 };
+	
+	case TURN_STOP:
+	default:
+		return (t_vec2) { 0.0, 0.0 };
+	}
 }
 
 static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
@@ -72,46 +98,23 @@ static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 	}
 }
 
-static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_in_line_time)
-{
-	switch (getTurnState(now_ms, last_in_line_time)) {
-	case TURN_MAIN:
-		return (t_vec2) { last_dir * 0.75, 1.0 };
-	
-	case TURN_RECOVERY:
-		return (t_vec2) { last_dir * 0.75, -1.0 };
-	
-	case TURN_RETRY:
-		return (t_vec2) { last_dir * -0.75, 1.0 };
-	
-	case TURN_STOP:
-	default:
-		return (t_vec2) { 0.0, 0.0 };
-	}
-}
-
 static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
 {
 	static int64_t last_warning_time = -1;
 	static int64_t last_in_line_time = -1;
+	static int last_distance_warning = 0;
 	static int last_dir = 0;
-	static int prev_warning = 0;
 	
-	int warning = getDistanceWarning();
-	if (!prev_warning && warning) {
+	int distance_warning = getDistanceWarning();
+	if (!last_distance_warning && distance_warning) {
 		last_warning_time = now_ms;
 		last_in_line_time = -1;
 		last_dir = 0;
 	}
-	prev_warning = warning;
+	last_distance_warning = distance_warning;
 	
-	t_warning_state warning_state = getWarningState(now_ms, last_warning_time, warning);
-	
-	if (warning_state == WARNING_BACK) {
-		return (t_vec2) { 0.0, -1.0 };
-	}
-	else if (warning_state == WARNING_STOP) {
-		return (t_vec2) { 0.0, 0.0 };
+	if (distance_warning) {
+		return calcMotorXyInWarning(now_ms, last_warning_time);
 	}
 	else if (isfinite(line_dist)) {
 		if (line_dist != 0) {
