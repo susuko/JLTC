@@ -7,7 +7,7 @@
 static const double DIST_TH = 15;
 
 static int _dist_fd;
-static int _distanceWarning = 0;
+static int _distance_warning = 0;
 
 static PI_THREAD (distanceMonitoringThread)
 {
@@ -15,14 +15,14 @@ static PI_THREAD (distanceMonitoringThread)
 	
 	while (1) {
 		double dist = readDist(_dist_fd);
-		_distanceWarning = dist < DIST_TH;
+		_distance_warning = prev_dist < DIST_TH && dist < DIST_TH;
 		
 		if (prev_dist != dist) {
 			logPrintf("distanceMonitoringThread", "%.2f", dist);
-			prev_dist = dist;
 		}
 		
-		delay(100);
+		prev_dist = dist;
+		delay(50);
 	}
 	
 	return NULL;
@@ -30,7 +30,7 @@ static PI_THREAD (distanceMonitoringThread)
 
 int getDistanceWarning(void)
 {
-	return _distanceWarning;
+	return _distance_warning;
 }
 
 void startDistanceMonitoringThread(int dist_fd)
