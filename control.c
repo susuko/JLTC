@@ -5,16 +5,16 @@
 #include <jltc.h>
 
 // Duration constant [ms]
-static const uint32_t WARNING_BACK_DURATION = 200;
+static const uint32_t WARNING_RESPONSE_BACK_DURATION = 200;
 static const uint32_t IN_STRAIGHT_LINE_DURATION = 500;
 static const uint32_t TURN_MAIN_DURATION = 750;
 static const uint32_t TURN_RECOVERY_DURATION = 750;
 static const uint32_t TURN_RETRY_DURATION = 750;
 
-typedef enum e_warning_state {
-	WARNING_BACK,
-	WARNING_STOP
-} t_warning_state;
+typedef enum e_warning_response_state {
+	WARNING_RESPONSE_BACK,
+	WARNING_RESPONSE_STOP
+} t_warning_response_state;
 
 typedef enum e_turn_state {
 	TURN_MAIN,
@@ -23,23 +23,23 @@ typedef enum e_turn_state {
 	TURN_STOP,
 } t_turn_state;
 
-static t_warning_state getWarningState(uint32_t now_ms, uint32_t last_warning_time)
+static t_warning_response_state getWarningResponseState(uint32_t now_ms, uint32_t last_warning_time)
 {
-	if (last_warning_time + WARNING_BACK_DURATION >= now_ms) {
-		return WARNING_BACK;
+	if (last_warning_time + WARNING_RESPONSE_BACK_DURATION >= now_ms) {
+		return WARNING_RESPONSE_BACK;
 	}
 	else {
-		return WARNING_STOP;
+		return WARNING_RESPONSE_STOP;
 	}
 }
 
 static t_vec2 calcMotorXyInWarning(uint32_t now_ms, uint32_t last_warning_time)
 {
-	switch (getWarningState(now_ms, last_warning_time)) {
-	case WARNING_BACK:
+	switch (getWarningResponseState(now_ms, last_warning_time)) {
+	case WARNING_RESPONSE_BACK:
 		return (t_vec2) { 0.0, -1.0 };
 	
-	case WARNING_STOP:
+	case WARNING_RESPONSE_STOP:
 	default:
 		return (t_vec2) { 0.0, 0.0 };
 	}
