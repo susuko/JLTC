@@ -11,7 +11,7 @@ static noreturn void shutdown(void)
 	logPrintf("shutdown", "1");
 	playEndBeep();
 	clearLcd(_lcd_fd);
-	putsLcd(_lcd_fd, "SHUTDOWN...");
+	putsLcd(_lcd_fd, "Shutdown...");
 	
 	system("shutdown -h now");
 	exit(0);
