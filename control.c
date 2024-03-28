@@ -23,9 +23,9 @@ typedef enum e_turn_state {
 	TURN_STOP,
 } t_turn_state;
 
-static t_warning_response_state getWarningResponseState(uint32_t now_ms, uint32_t last_warning_time)
+static t_warning_response_state getWarningResponseState(uint32_t now_ms, uint32_t last_warning_start_time)
 {
-	if (last_warning_time + WARNING_RESPONSE_BACK_DURATION >= now_ms) {
+	if (last_warning_start_time + WARNING_RESPONSE_BACK_DURATION >= now_ms) {
 		return WARNING_RESPONSE_BACK;
 	}
 	else {
@@ -33,9 +33,12 @@ static t_warning_response_state getWarningResponseState(uint32_t now_ms, uint32_
 	}
 }
 
-static t_vec2 calcMotorXyInWarning(uint32_t now_ms, uint32_t last_warning_time)
+// During distance warning,
+// 1. Back. (WARNING_RESPONSE_BACK_DURATION[ms])
+// 2. Stop.
+static t_vec2 calcMotorXyInWarning(uint32_t now_ms, uint32_t last_warning_start_time)
 {
-	switch (getWarningResponseState(now_ms, last_warning_time)) {
+	switch (getWarningResponseState(now_ms, last_warning_start_time)) {
 	case WARNING_RESPONSE_BACK:
 		return (t_vec2) { 0.0, -1.0 };
 	
@@ -52,15 +55,20 @@ static t_turn_state getTurnState(uint32_t now_ms, uint32_t last_in_line_time)
 	if ((time_sum += TURN_MAIN_DURATION) >= now_ms) {
 		return TURN_MAIN;
 	}
-	if ((time_sum += TURN_RECOVERY_DURATION) >= now_ms) {
+	else if ((time_sum += TURN_RECOVERY_DURATION) >= now_ms) {
 		return TURN_RECOVERY;
 	}
-	if ((time_sum += TURN_RETRY_DURATION) >= now_ms) {
+	else if ((time_sum += TURN_RETRY_DURATION) >= now_ms) {
 		return TURN_RETRY;
 	}
 	return TURN_STOP;
 }
 
+// Outside the line,
+// 1. Turn to last_dir.
+// 2. If the line is not found, cancel step 1.
+// 3. Turn in the opposite direction to last_dir.
+// 4. If the line is not found, stop.
 static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_in_line_time)
 {
 	switch (getTurnState(now_ms, last_in_line_time)) {
@@ -79,6 +87,10 @@ static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_in
 	}
 }
 
+// Inside the line,
+// - Basically, move forward.
+// - Turn proportional to line_dist.
+// - Reduce turns in a straight line.
 static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 {
 	static int64_t last_in_straight_line_time = -1;
@@ -100,21 +112,21 @@ static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 
 static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
 {
-	static int64_t last_warning_time = -1;
+	static int64_t last_warning_start_time = -1;
 	static int64_t last_in_line_time = -1;
 	static int last_distance_warning = 0;
 	static int last_dir = 0;
 	
 	int distance_warning = getDistanceWarning();
 	if (!last_distance_warning && distance_warning) {
-		last_warning_time = now_ms;
-		last_in_line_time = -1;
-		last_dir = 0;
+		last_warning_start_time = now_ms;
 	}
 	last_distance_warning = distance_warning;
 	
-	if (distance_warning) {
-		return calcMotorXyInWarning(now_ms, last_warning_time);
+	if (last_warning_start_time >= 0 && distance_warning) {
+		last_dir = 0;
+		last_in_line_time = -1;
+		return calcMotorXyInWarning(now_ms, last_warning_start_time);
 	}
 	else if (isfinite(line_dist)) {
 		if (line_dist != 0) {
