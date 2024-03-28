@@ -40,11 +40,11 @@ static t_vec2 calcMotorXyInWarning(uint32_t now_ms, uint32_t last_warning_start_
 {
 	switch (getWarningResponseState(now_ms, last_warning_start_time)) {
 	case WARNING_RESPONSE_BACK:
-		return (t_vec2) { 0.0, -1.0 };
+		return (t_vec2) { .x = 0.0, .y = -1.0 };
 	
 	case WARNING_RESPONSE_STOP:
 	default:
-		return (t_vec2) { 0.0, 0.0 };
+		return (t_vec2) { .x = 0.0, .y = 0.0 };
 	}
 }
 
@@ -73,17 +73,17 @@ static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_in
 {
 	switch (getTurnState(now_ms, last_in_line_time)) {
 	case TURN_MAIN:
-		return (t_vec2) { last_dir * 0.75, 1.0 };
+		return (t_vec2) { .x = last_dir * 0.75, .y = 1.0 };
 	
 	case TURN_RECOVERY:
-		return (t_vec2) { last_dir * 0.75, -1.0 };
+		return (t_vec2) { .x = last_dir * 0.75, .y = -1.0 };
 	
 	case TURN_RETRY:
-		return (t_vec2) { last_dir * -0.75, 1.0 };
+		return (t_vec2) { .x = last_dir * -0.75, .y = 1.0 };
 	
 	case TURN_STOP:
 	default:
-		return (t_vec2) { 0.0, 0.0 };
+		return (t_vec2) { .x = 0.0, .y = 0.0 };
 	}
 }
 
@@ -103,19 +103,22 @@ static t_vec2 calcMotorXyInLine(uint32_t now_ms, double line_dist)
 		last_in_straight_line_time + IN_STRAIGHT_LINE_DURATION >= now_ms;
 
 	if (is_in_straight_line) {
-		return (t_vec2) { line_dist * 0.25, 1.0 };
+		return (t_vec2) { .x = line_dist * 0.25, .y = 1.0 };
 	}
 	else {
-		return (t_vec2) { line_dist * 0.50, 1.0 };
+		return (t_vec2) { .x = line_dist * 0.50, .y = 1.0 };
 	}
 }
 
-static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
+static t_vec2 calcMotorXy()
 {
 	static int64_t last_warning_start_time = -1;
 	static int64_t last_in_line_time = -1;
 	static int last_distance_warning = 0;
 	static int last_dir = 0;
+	
+	uint32_t now_ms = millis();
+	double line_dist = getLineDist();
 	
 	int distance_warning = getDistanceWarning();
 	if (!last_distance_warning && distance_warning) {
@@ -139,7 +142,7 @@ static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
 		return calcMotorXyOutLine(now_ms, last_dir, last_in_line_time);
 	}
 	
-	return (t_vec2) { 0.0, 0.0 };
+	return (t_vec2) { .x = 0.0, .y = 0.0 };
 }
 
 void startControlRobot(int lcd_fd)
@@ -159,16 +162,14 @@ void startControlRobot(int lcd_fd)
 			break;
 		}
 		
-		uint32_t now_ms = millis();
-		double line_dist = getLineDist();
-		t_vec2 motor_xy = calcMotorXy(now_ms, line_dist);
+		t_vec2 motor_xy = calcMotorXy();
 		
 		setMotorXy(motor_xy);
 		
 		delay(10);
 	}
 	
-	setMotor((t_vec2) { 0.0, 0.0 });
+	setMotor((t_vec2) { .x = 0.0, .y = 0.0 });
 	clearLcd(lcd_fd);
 }
 
