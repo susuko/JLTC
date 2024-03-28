@@ -39,7 +39,7 @@ static void initLoggerPipe(void)
 // Example: logPrintf("command", "%d, %d", 1, 2);
 int logPrintf(char *cmd, char *fmt, ...)
 {
-	#if LOG_ENABLE == 1
+#if LOG_ENABLE == 1
 	
 	va_list ap;
 	va_start(ap, fmt);
@@ -53,27 +53,27 @@ int logPrintf(char *cmd, char *fmt, ...)
 	va_end(ap);
 	return len < PIPE_BUF ? 0 : -1;
 	
-	#else
+#else
 	
 	(void)cmd;
 	(void)fmt;
 	return 0;
 	
-	#endif
+#endif
 }
 
 void startLoggerThread(void)
 {
-	#if LOG_ENABLE == 1
+#if LOG_ENABLE == 1
 	
 	initLoggerPipe();
 	viewer_fp = popen(PYTHON_PATH " " VIEWER_PATH, "w");
 	piThreadCreate(loggerThread);
 	
-	#else
+#else
 	
 	(void)initLoggerPipe;
 	(void)loggerThread;
 	
-	#endif
+#endif
 }
