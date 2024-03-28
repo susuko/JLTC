@@ -5,10 +5,17 @@
 #include <jltc.h>
 
 // Duration constant [ms]
+static const uint32_t WARNING_BACK_DURATION = 200;
 static const uint32_t IN_STRAIGHT_LINE_DURATION = 500;
 static const uint32_t TURN_MAIN_DURATION = 750;
 static const uint32_t TURN_RECOVERY_DURATION = 750;
 static const uint32_t TURN_RETRY_DURATION = 750;
+
+typedef enum e_warning_state {
+	WARNING_BACK,
+	WARNING_STOP,
+	WARNING_NONE
+} t_warning_state;
 
 typedef enum e_turn_state {
 	TURN_MAIN,
@@ -16,6 +23,19 @@ typedef enum e_turn_state {
 	TURN_RETRY,
 	TURN_STOP,
 } t_turn_state;
+
+static t_warning_state getWarningState(uint32_t now_ms, uint32_t last_warning_time, int warning)
+{
+	if (last_warning_time + WARNING_BACK_DURATION >= now_ms) {
+		return WARNING_BACK;
+	}
+	else if (warning) {
+		return WARNING_STOP;
+	}
+	else {
+		return WARNING_NONE;
+	}
+}
 
 static t_turn_state getTurnState(uint32_t now_ms, uint32_t last_in_line_time)
 {
@@ -72,14 +92,28 @@ static t_vec2 calcMotorXyOutLine(uint32_t now_ms, int last_dir, uint32_t last_in
 
 static t_vec2 calcMotorXy(uint32_t now_ms, double line_dist)
 {
-	static int last_dir = 0;
+	static int64_t last_warning_time = -1;
 	static int64_t last_in_line_time = -1;
+	static int last_dir = 0;
+	static int prev_warning = 0;
 	
-	if (getDistanceWarning()) {
+	int warning = getDistanceWarning();
+	if (!prev_warning && warning) {
+		last_warning_time = now_ms;
+		last_in_line_time = -1;
+		last_dir = 0;
+	}
+	prev_warning = warning;
+	
+	t_warning_state warning_state = getWarningState(now_ms, last_warning_time, warning);
+	
+	if (warning_state == WARNING_BACK) {
+		return (t_vec2) { 0.0, -1.0 };
+	}
+	else if (warning_state == WARNING_STOP) {
 		return (t_vec2) { 0.0, 0.0 };
 	}
-	
-	if (isfinite(line_dist)) {
+	else if (isfinite(line_dist)) {
 		if (line_dist != 0) {
 			last_dir = line_dist < 0 ? -1 : 1;
 		}
