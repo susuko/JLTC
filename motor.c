@@ -53,7 +53,7 @@ static int testXyToLr(void)
 	return result;
 }
 
-// left, right: -1.0 ... 1.0
+// left(lr.x), right(lr.y): -1.0 ... 1.0
 void setMotor(t_vec2 lr)
 {
 	int left_value = (int)round(fabs(lr.x) * PWM_RANGE);
@@ -75,7 +75,7 @@ void setMotor(t_vec2 lr)
 	pthread_mutex_unlock(&motor_mutex);
 }
 
-// x, y: -1.0 ... 1.0
+// xy.x, xy.y: -1.0 ... 1.0
 void setMotorXy(t_vec2 xy)
 {
 	setMotor(xyToLr(xy));
