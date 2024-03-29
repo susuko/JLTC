@@ -5,19 +5,14 @@ from time import sleep
 from collections import namedtuple
 from collections import defaultdict
 
-# NamedTuple definition
-Size = namedtuple("Size", ["width", "height"])
-Point = namedtuple("Point", ["x", "y"])
-Rect = namedtuple("Rect", ["offset", "size"])
-Font = namedtuple("Font", ["family", "size"])
-
 class Dashboard(tk.Tk):
     # Canvas constant
-    CANVAS_SIZE = Size(width=200, height=300)
+    CANVAS_WIDTH = 200
+    CANVAS_HEIGHT = 300
     CANVAS_SCALE = 2.2
 
     # Font constant
-    FONT = Font("Consolas", 18)
+    FONT = ("Consolas", 18)
 
     # Color constant
     BG_COLOR = "#0f160d"
@@ -34,9 +29,9 @@ class Dashboard(tk.Tk):
     LAST_UPDATED_TIME_TEXT_FORMAT = "> LAST_UPDATED_TIME: %d[MS]"
 
     # Rect constant
-    BOARD_RECT = Rect(Point(0, 0), Size(100, 200))
-    LEFT_TIRE_RECT = Rect(Point(-70, 70), Size(30, 60))
-    RIGHT_TIRE_RECT = Rect(Point(70, 70), Size(30, 60))
+    BOARD_RECT = (50, 50, 150, 250)
+    LEFT_TIRE_RECT = (15, 190, 45, 250)
+    RIGHT_TIRE_RECT = (155, 190, 185, 250)
 
     def __init__(self):
         super().__init__()
@@ -86,8 +81,8 @@ class Dashboard(tk.Tk):
     def create_canvas(self, parent):
         self.canvas = tk.Canvas(
             parent,
-            width=self.CANVAS_SIZE.width * self.CANVAS_SCALE,
-            height=self.CANVAS_SIZE.height * self.CANVAS_SCALE,
+            width=self.CANVAS_WIDTH * self.CANVAS_SCALE,
+            height=self.CANVAS_HEIGHT * self.CANVAS_SCALE,
             highlightthickness=0,
             bg=self.BG_COLOR
         )
@@ -101,17 +96,16 @@ class Dashboard(tk.Tk):
         self.right_tire, self.right_tire_text = self.create_tire(self.RIGHT_TIRE_RECT)
 
     def create_board(self, rect):
-        (x0, y0), (x1, y1) = self._rect_to_points(rect)
         board = self.canvas.create_rectangle(
-            x0, y0, x1, y1, fill=self.SHAPE_COLOR, outline=""
+            rect, fill=self.SHAPE_COLOR, outline=""
         )
         return board
 
     def create_tire(self, rect):
-        (x0, y0), (x1, y1) = self._rect_to_points(rect)
         tire = self.canvas.create_rectangle(
-            x0, y0, x1, y1, fill=self.SHAPE_COLOR, outline=""
+            rect, fill=self.SHAPE_COLOR, outline=""
         )
+        (x0, y0, x1, y1) = rect
         tire_text = self.canvas.create_text(
             (x0 + x1) / 2,
             (y0 + y1) / 2,
@@ -120,20 +114,6 @@ class Dashboard(tk.Tk):
             fill=self.FONT_COLOR
         )
         return (tire, tire_text)
-
-    def _rect_to_points(self, rect):
-        canvas_mid = Point(x=self.CANVAS_SIZE.width / 2, y=self.CANVAS_SIZE.height / 2)
-        rect_mid = Point(x=rect.size.width / 2, y=rect.size.height / 2)
-        return [
-            Point(
-                canvas_mid.x - rect_mid.x + rect.offset.x,
-                canvas_mid.y - rect_mid.y + rect.offset.y
-            ),
-            Point(
-                canvas_mid.x + rect_mid.x + rect.offset.x,
-                canvas_mid.y + rect_mid.y + rect.offset.y
-            )
-        ]
 
     def create_label(self, parent, text):
         label = tk.Label(
